@@ -1,0 +1,46 @@
+services:
+  # --- BANCO DE DADOS ---
+  db:
+    image: postgres:15
+    container_name: opengd_db
+    environment:
+      POSTGRES_DB: opengd_database
+      POSTGRES_USER: user_admin
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_admin -d opengd_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- BACKEND (JAVA/MAVEN) ---
+  backend:
+    build: ./OPENGDFLOW-BACK
+    container_name: opengd_back
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/opengd_database
+      - SPRING_DATASOURCE_USERNAME=user_admin
+      - SPRING_DATASOURCE_PASSWORD=password123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # --- FRONTEND (NEXT.JS) ---
+  frontend:
+    build: ./OPENGDFLOW-FRONT
+    container_name: opengd_front
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./OPENGDFLOW-FRONT/.env
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      - API_URL_SERVER=http://backend:8080
+      - WATCHPACK_POLLING=true # Ajuda no Hot Reload dentro do Docker
+    depends_on:
+      - backend
