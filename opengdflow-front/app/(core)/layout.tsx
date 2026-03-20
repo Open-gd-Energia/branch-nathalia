@@ -1,6 +1,9 @@
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./_components/sidebar";
 
+// Rotas autenticadas usam headers/cookies — evita tentativa de geração estática
+export const dynamic = "force-dynamic";
+
 export default function CoreLayout({
 	children,
 }: {
