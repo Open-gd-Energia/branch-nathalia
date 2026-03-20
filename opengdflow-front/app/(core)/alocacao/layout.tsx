@@ -1,5 +1,5 @@
 import { ListScreenHeader } from "../_components/list-screen/header";
-import { ListLayout } from "../_components/list-screen/layout";
+import { ListLayout } from "../_components/list-screen/list-layout";
 import { AlocacaoList } from "./_components/alocacao-list";
 import { Header } from "./_components/header";
 import { HeaderItems } from "./_components/header-items";

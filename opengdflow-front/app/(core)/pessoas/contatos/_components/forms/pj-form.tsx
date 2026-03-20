@@ -2,7 +2,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
-import { useInputMask } from "use-mask-input";
+import { useMaskInput } from "use-mask-input";
 import { AddressFormTabs } from "@/app/(core)/_components/address-form/tabs";
 import {
 	FormControl,
@@ -34,8 +34,8 @@ export const PJForm = () => {
 		},
 	});
 
-	const cnpjInputRef = useInputMask({ mask: "**.***.***/****-**" });
-	const phoneInputRef = useInputMask({ mask: "(99) 9 9999-9999" });
+	const cnpjInputRef = useMaskInput({ mask: "**.***.***/****-**" });
+	const phoneInputRef = useMaskInput({ mask: "(99) 9 9999-9999" });
 
 	return (
 		<div className="flex flex-col gap-5">

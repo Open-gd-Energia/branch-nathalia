@@ -1,5 +1,5 @@
 import { ListScreenHeader } from "../../_components/list-screen/header";
-import { ListLayout } from "../../_components/list-screen/layout";
+import { ListLayout } from "../../_components/list-screen/list-layout";
 import { HeaderItems } from "./_components/header-items";
 import { TariffRulesList } from "./_components/tariff-rules-list";
 import { fetchTariffRules } from "./_services/fetch";
