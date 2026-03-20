@@ -1,0 +1,799 @@
+Alterados:
+
+opengdflow-back/src/main/java/br/com/opengd/entity/AlocacaoItem.java
+opengdflow-back/src/main/java/br/com/opengd/entity/AlocacaoItemId.java
+
+Foi corrigido o erro estrutural da chave composta em AlocacaoItem: havia inversão de parâmetros no construtor da entidade, causando inconsistência entre associação e PK composta.
+Ajustei de forma mínima e segura o backend para manter coerência com alocacao_id + consumidor_id, sem mudanças fora do escopo e sem impacto em DTO/service/controller ou contrato JSON.
+Lint dos arquivos alterados sem erros.
+
+opengdflow-back/src/main/java/br/com/opengd/entity/Fatura.java
+opengdflow-back/src/main/java/br/com/opengd/entity/Consumidor.java
+opengdflow-back/src/main/java/br/com/opengd/entity/Usina.java
+opengdflow-back/src/main/java/br/com/opengd/controller/request/FaturaRequest.java
+opengdflow-back/src/main/java/br/com/opengd/controller/response/FaturaResponse.java
+opengdflow-back/src/main/java/br/com/opengd/controller/request/ConsumidorRequest.java
+opengdflow-back/src/main/java/br/com/opengd/controller/response/ConsumidorResponse.java
+opengdflow-back/src/main/java/br/com/opengd/controller/response/ConsumidorDadosPrimariosResponse.java
+opengdflow-back/src/main/java/br/com/opengd/controller/request/UsinaRequest.java
+opengdflow-back/src/main/java/br/com/opengd/controller/response/UsinaResponse.java
+opengdflow-back/src/main/java/br/com/opengd/controller/response/UsinaDadosPrimariosResponse.java
+opengdflow-back/src/main/java/br/com/opengd/usecase/impl/FattureWebUseCaseImpl.java
+
+-- UP: renomear colunas para o padrão correto
+ALTER TABLE consumidor RENAME COLUMN consumor_referencia_kwh TO consumo_referencia_kwh;
+ALTER TABLE fatura RENAME COLUMN bandera_tarifaria_id TO bandeira_tarifaria_id;
+ALTER TABLE fatura RENAME COLUMN energia_conpensada_local TO energia_compensada_local;
+ALTER TABLE usina RENAME COLUMN pontencia_pico TO potencia_pico;
+
+-- DOWN: reverter renomeações
+ALTER TABLE consumidor RENAME COLUMN consumo_referencia_kwh TO consumor_referencia_kwh;
+ALTER TABLE fatura RENAME COLUMN bandeira_tarifaria_id TO bandera_tarifaria_id;
+ALTER TABLE fatura RENAME COLUMN energia_compensada_local TO energia_conpensada_local;
+ALTER TABLE usina RENAME COLUMN potencia_pico TO pontencia_pico;
+
+Gere(i) a migração SQL reversível (UP/DOWN) para renomear as 4 colunas legadas no PostgreSQL.
+Atualizei o backend para apontar para os nomes físicos corrigidos via @Column/@JoinColumn.
+Renomeei os campos correspondentes nos DTOs/JSON para os nomes corretos e adicionei @JsonAlias para aceitar os nomes legados em requests.
+Ajustei FattureWebUseCaseImpl e validei com mvn test.
+
+Foram alterados somente os arquivos abaixo (padronização incremental segura para Usuario):
+
+Adicionados:
+opengdflow-back/src/main/java/br/com/opengd/utils/StatusAtivoInativoMapper.java
+opengdflow-back/src/main/java/br/com/opengd/utils/StatusAtivoInativoLongDeserializer.java
+Atualizados:
+opengdflow-back/src/main/java/br/com/opengd/controller/request/UsuarioRequest.java
+opengdflow-back/src/main/java/br/com/opengd/usecase/impl/UsuarioUseCaseImpl.java
+
+Alterações em Java/Backend (convertendo contratos + types)
+data_nascimento:
+
+PessoaFisica.dataNascimento: String -> LocalDate (com @Column(name="data_nascimento"))
+PessoaFisicaRequest/Response.dataNascimento: String -> LocalDate
+Compatibilidade: adicionei FlexibleLocalDateDeserializer para aceitar ISO datetime vindo do front (Date->ISO string) sem quebrar parse.
+latitude/longitude:
+
+Endereco.latitude/longitude: String -> BigDecimal
+EnderecoRequest/Response.latitude/longitude: String -> BigDecimal
+documento.tamanho (bytes):
+
+Documento.tamanho: BigDecimal -> Long
+DocumentoRequest/DocumentoResponse/DocumentoFileResponse.tamanho: BigDecimal -> Long
+Alterações em contratos (frontend types)
+opengdflow-front/lib/types/api.d.ts:
+EnderecoRequest/EnderecoResponse.latitude/longitude: string -> number
+Validação técnica do build
+Rodei ./mvnw test -q no backend e compilou com sucesso.
+
+
+-- 1) Preserva legado
+ALTER TABLE pessoa_fisica RENAME COLUMN data_nascimento TO data_nascimento_legacy;
+
+-- 2) Cria coluna nova tipada
+ALTER TABLE pessoa_fisica ADD COLUMN data_nascimento date;
+
+-- 3) Backfill com parsing tolerante (ISO date e ISO datetime; e formatos dd/MM/yyyy e dd-MM-yyyy)
+UPDATE pessoa_fisica
+SET data_nascimento =
+  CASE
+    WHEN data_nascimento_legacy IS NULL OR btrim(data_nascimento_legacy) = '' THEN NULL
+    WHEN data_nascimento_legacy ~ '^\d{4}-\d{2}-\d{2}' THEN substring(btrim(data_nascimento_legacy) from 1 for 10)::date
+    WHEN data_nascimento_legacy ~ '^\d{2}/\d{2}/\d{4}$' THEN to_date(btrim(data_nascimento_legacy), 'DD/MM/YYYY')
+    WHEN data_nascimento_legacy ~ '^\d{2}-\d{2}-\d{4}$' THEN to_date(btrim(data_nascimento_legacy), 'DD-MM-YYYY')
+    ELSE NULL
+  END;
+
+-- 4) Falha se houver valor legado não convertido
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM pessoa_fisica
+    WHERE data_nascimento_legacy IS NOT NULL
+      AND btrim(data_nascimento_legacy) <> ''
+      AND data_nascimento IS NULL
+  ) THEN
+    RAISE EXCEPTION 'Conversão falhou: existem data_nascimento_legacy inválidos (não convertidos).';
+  END IF;
+END $$;
+
+ALTER TABLE pessoa_fisica DROP COLUMN data_nascimento;
+ALTER TABLE pessoa_fisica RENAME COLUMN data_nascimento_legacy TO data_nascimento;
+
+ALTER TABLE pessoa_fisica DROP COLUMN data_nascimento;
+ALTER TABLE pessoa_fisica RENAME COLUMN data_nascimento_legacy TO data_nascimento;
+
+ALTER TABLE endereco RENAME COLUMN latitude TO latitude_legacy;
+ALTER TABLE endereco RENAME COLUMN longitude TO longitude_legacy;
+
+-- Ajuste escala/precisão se necessário (mantive ampla)
+ALTER TABLE endereco
+  ADD COLUMN latitude numeric(20,10),
+  ADD COLUMN longitude numeric(20,10);
+
+UPDATE endereco
+SET
+  latitude =
+    CASE
+      WHEN latitude_legacy IS NULL OR btrim(latitude_legacy) = '' THEN NULL
+      WHEN btrim(latitude_legacy) ~ '^[+-]?\d+([.,]\d+)?$'
+        THEN replace(btrim(latitude_legacy), ',', '.')::numeric(20,10)
+      ELSE NULL
+    END,
+  longitude =
+    CASE
+      WHEN longitude_legacy IS NULL OR btrim(longitude_legacy) = '' THEN NULL
+      WHEN btrim(longitude_legacy) ~ '^[+-]?\d+([.,]\d+)?$'
+        THEN replace(btrim(longitude_legacy), ',', '.')::numeric(20,10)
+      ELSE NULL
+    END;
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM endereco
+    WHERE latitude_legacy IS NOT NULL AND btrim(latitude_legacy) <> '' AND latitude IS NULL
+  ) OR EXISTS (
+    SELECT 1 FROM endereco
+    WHERE longitude_legacy IS NOT NULL AND btrim(longitude_legacy) <> '' AND longitude IS NULL
+  ) THEN
+    RAISE EXCEPTION 'Conversão falhou: existem latitude/longitude inválidos (não convertidos).';
+  END IF;
+END $$;
+
+ALTER TABLE endereco DROP COLUMN latitude;
+ALTER TABLE endereco DROP COLUMN longitude;
+
+ALTER TABLE endereco RENAME COLUMN latitude_legacy TO latitude;
+ALTER TABLE endereco RENAME COLUMN longitude_legacy TO longitude;
+
+ALTER TABLE documento RENAME COLUMN tamanho TO tamanho_legacy;
+
+-- bytes inteiros
+ALTER TABLE documento ADD COLUMN tamanho bigint;
+
+-- Valida que não existe parte fracionária (bytes devem ser inteiros)
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM documento
+    WHERE tamanho_legacy IS NOT NULL
+      AND tamanho_legacy <> trunc(tamanho_legacy)
+  ) THEN
+    RAISE EXCEPTION 'Conversão falhou: documento.tamanho_legacy possui fração (esperado inteiro em bytes).';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1
+    FROM documento
+    WHERE tamanho_legacy IS NOT NULL
+      AND tamanho_legacy < 0
+  ) THEN
+    RAISE EXCEPTION 'Conversão falhou: documento.tamanho_legacy possui valores negativos.';
+  END IF;
+END $$;
+
+UPDATE documento
+SET tamanho = tamanho_legacy::bigint;
+
+ALTER TABLE documento DROP COLUMN tamanho;
+ALTER TABLE documento RENAME COLUMN tamanho_legacy TO tamanho;
+
+alterados apenas:
+
+opengdflow-back/src/main/java/br/com/opengd/entity/Usuario.java
+opengdflow-back/src/main/java/br/com/opengd/entity/Perfil.java
+
+Comparação antes/depois
+3.1 Usuario.consumidores (N:N)
+Antes
+
+Tinha apenas:
+@ManyToMany(cascade = ..., fetch = FetchType.LAZY)
+O join table e join columns eram inferidos por convenção (frágil).
+Depois
+
+Foi declarado explicitamente:
+@JoinTable(name = "usuario_consumidores", joinColumns=@JoinColumn(name="usuario_id"), inverseJoinColumns=@JoinColumn(name="consumidor_id"))
+3.2 Perfil.permissoes (N:N)
+Antes
+
+Tinha apenas:
+@ManyToMany(fetch = FetchType.EAGER)
+join table e colunas inferidos por convenção.
+Depois
+
+Foi declarado explicitamente:
+@JoinTable(name = "perfil_permissoes", joinColumns=@JoinColumn(name="perfil_id"), inverseJoinColumns=@JoinColumn(name="permissao_id"))
+Não mexi em regras de negócio. Também não alterei fetch, apenas mantive os mesmos fetch já existentes (lazy/eager) — conforme sua regra.
+
+
+1. Perfil.permissoes: EAGER -> LAZY (redução de acoplamento por carregamento automático)
+Antes
+
+@ManyToMany(fetch = FetchType.EAGER) em Perfil.permissoes
+Depois
+
+@ManyToMany(fetch = FetchType.LAZY) em Perfil.permissoes
+
+Arquivos alterados
+opengdflow-back/src/main/java/br/com/opengd/entity/Perfil.java
+opengdflow-back/src/main/java/br/com/opengd/usecase/impl/PerfilUseCaseImpl.java
+opengdflow-back/src/main/java/br/com/opengd/usecase/impl/UsuarioUseCaseImpl.java
+
+ALTER TABLE fattureweb_processamento
+    ADD COLUMN IF NOT EXISTS status VARCHAR(50),
+    ADD COLUMN IF NOT EXISTS erro TEXT,
+    ADD COLUMN IF NOT EXISTS total_processado INTEGER,
+    ADD COLUMN IF NOT EXISTS correlation_id VARCHAR(64);
+	
+	ALTER TABLE fattureweb_processamento
+    DROP COLUMN IF EXISTS status,
+    DROP COLUMN IF EXISTS erro,
+    DROP COLUMN IF EXISTS total_processado,
+    DROP COLUMN IF EXISTS correlation_id;
+	
+Ajustes de código
+Arquivo	Alteração
+FattureWebProcessamento	Novos campos: status, erro, totalProcessado, correlationId
+FattureWebService	iniciarProcessamentoFaturas: gera correlationId, grava status/totalProcessado em sucesso e status/erro em falha
+FattureWebService	saveUltimoProcessamento: passa a receber e preencher os novos campos
+BusinessException	Novo construtor (String, Throwable) para preservar a causa
+Fluxo atualizado:
+
+Sucesso: grava status=SUCESSO, total_processado=retorno.size(), correlation_id.
+Erro: grava status=ERRO, erro=mensagem truncada (2000 chars), correlation_id e relança a exceção.
+4. Benefícios para auditoria e suporte
+Campo	Uso
+status	Identificar execuções com sucesso ou erro sem inspecionar logs
+erro	Mensagem de erro persistida para análise posterior
+total_processado	Conferir quantas faturas foram importadas por execução
+correlation_id	Correlacionar registros da tabela com logs (MDC, trace, etc.)
+BEGIN;
+
+-- Evita duas execuções simultâneas da migração
+SELECT pg_advisory_xact_lock(2026031901);
+
+-- =========================================================
+-- 1) COLUNAS NOVAS ADITIVAS (sem quebrar legado)
+-- =========================================================
+
+ALTER TABLE public.fatura
+    ADD COLUMN IF NOT EXISTS fatura_id_externo varchar(255),
+    ADD COLUMN IF NOT EXISTS total_pagar numeric(15,8),
+    ADD COLUMN IF NOT EXISTS data_emissao date,
+    ADD COLUMN IF NOT EXISTS periodo_fiscal date,
+    ADD COLUMN IF NOT EXISTS data_leitura_anterior date,
+    ADD COLUMN IF NOT EXISTS periodo_dias bigint,
+    ADD COLUMN IF NOT EXISTS chave_acesso varchar(255),
+    ADD COLUMN IF NOT EXISTS numero_fatura_longo varchar(255),
+    ADD COLUMN IF NOT EXISTS codigo_barras varchar(255),
+    ADD COLUMN IF NOT EXISTS debito_automatico boolean,
+    ADD COLUMN IF NOT EXISTS via_fatura varchar(255),
+    ADD COLUMN IF NOT EXISTS saldo_mes_tp numeric(15,8),
+    ADD COLUMN IF NOT EXISTS saldo_mes_fp numeric(15,8),
+    ADD COLUMN IF NOT EXISTS saldo_acumulado_tp numeric(15,8),
+    ADD COLUMN IF NOT EXISTS saldo_acumulado_fp numeric(15,8),
+    ADD COLUMN IF NOT EXISTS saldo_expirar_tp numeric(15,8),
+    ADD COLUMN IF NOT EXISTS saldo_expirar_fp numeric(15,8),
+    ADD COLUMN IF NOT EXISTS fatura_origem varchar(100),
+    ADD COLUMN IF NOT EXISTS fatura_tipo varchar(100),
+    ADD COLUMN IF NOT EXISTS data_insercao_origem timestamp(6) without time zone,
+    ADD COLUMN IF NOT EXISTS json_origem_fattureweb_id bigint;
+
+ALTER TABLE public.consumidor
+    ADD COLUMN IF NOT EXISTS cpf_cnpj varchar(20),
+    ADD COLUMN IF NOT EXISTS inscricao_estadual varchar(50),
+    ADD COLUMN IF NOT EXISTS subgrupo varchar(20),
+    ADD COLUMN IF NOT EXISTS atividade varchar(255),
+    ADD COLUMN IF NOT EXISTS atividade_especifica varchar(255),
+    ADD COLUMN IF NOT EXISTS amperagem varchar(50),
+    ADD COLUMN IF NOT EXISTS categoria_tensao varchar(20);
+
+ALTER TABLE public.endereco
+    ADD COLUMN IF NOT EXISTS logradouro varchar(255),
+    ADD COLUMN IF NOT EXISTS regiao varchar(255);
+
+-- =========================================================
+-- 2) TABELAS NOVAS ADERENTES AO JSON
+-- =========================================================
+
+CREATE TABLE IF NOT EXISTS public.fatura_produto (
+    id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    fatura_id bigint NOT NULL REFERENCES public.fatura(id),
+    ordem bigint,
+    descricao varchar(255),
+    unidade varchar(50),
+    quantidade numeric(15,8),
+    valor_total numeric(15,8),
+    tarifa_com_impostos numeric(15,8),
+    tarifa_sem_impostos numeric(15,8),
+    tributo_piscofins numeric(15,8),
+    tributo_icms numeric(15,8),
+    linha_original text,
+    componente varchar(100),
+    origem_energia varchar(100),
+    grupo_geracao varchar(100),
+    referencia_mes varchar(20),
+    bandeira_tarifaria varchar(100),
+    patamar varchar(50),
+    ajuste boolean,
+    ouc boolean,
+    mpt boolean,
+    opt boolean,
+    rs boolean,
+    muc boolean
+);
+
+CREATE TABLE IF NOT EXISTS public.fatura_tributo (
+    id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    fatura_id bigint NOT NULL REFERENCES public.fatura(id),
+    ordem bigint,
+    nome varchar(50) NOT NULL,
+    base_calculo numeric(15,8),
+    taxa numeric(15,8),
+    valor numeric(15,8)
+);
+
+CREATE TABLE IF NOT EXISTS public.fatura_medidor (
+    id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    fatura_id bigint NOT NULL REFERENCES public.fatura(id),
+    ordem bigint,
+    numero_medidor varchar(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS public.fatura_medidor_leitura (
+    id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    fatura_medidor_id bigint NOT NULL REFERENCES public.fatura_medidor(id),
+    ordem bigint,
+    descricao_completa varchar(255),
+    posto varchar(20),
+    valor_anterior numeric(15,8),
+    valor_atual numeric(15,8),
+    fator_multiplicador numeric(15,8),
+    valor_leitura numeric(15,8),
+    tipo varchar(50)
+);
+
+CREATE TABLE IF NOT EXISTS public.fatura_bandeira_periodo (
+    id bigint GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    fatura_id bigint NOT NULL REFERENCES public.fatura(id),
+    ordem bigint,
+    valor_json jsonb
+);
+
+CREATE TABLE IF NOT EXISTS public.fatura_analise_tributaria (
+    fatura_id bigint PRIMARY KEY REFERENCES public.fatura(id),
+    calc_energia_comp_te numeric(15,8),
+    calc_te_med numeric(15,8),
+    calc_tusd_med numeric(15,8),
+    calc_te_mais_tusd_med numeric(15,8),
+    calc_te_mais_tusd_med_formula text,
+    calc_total_pis_cofins_comp numeric(15,8),
+    calc_base_calc_te_piscofins numeric(15,8),
+    calc_base_calc_tusd_piscofins numeric(15,8),
+    calc_te_piscofins_valor numeric(15,8),
+    calc_tusd_piscofins_valor numeric(15,8),
+    calc_soma_te_tusd_piscofins numeric(15,8),
+    calc_dif_piscofins numeric(15,8),
+    calc_total_icms_comp numeric(15,8),
+    calc_base_calc_te_icms numeric(15,8),
+    calc_base_calc_tusd_icms numeric(15,8),
+    calc_te_icms_valor numeric(15,8),
+    calc_tusd_icms_valor numeric(15,8),
+    calc_soma_te_tusd_icms numeric(15,8),
+    calc_dif_icms numeric(15,8),
+    status varchar(100)
+);
+
+-- =========================================================
+-- 3) ÍNDICES / CHAVES DE SEGURANÇA
+-- =========================================================
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_fatura_fatura_id_externo
+    ON public.fatura (fatura_id_externo)
+    WHERE fatura_id_externo IS NOT NULL;
+
+CREATE INDEX IF NOT EXISTS ix_fatura_json_origem_fattureweb_id
+    ON public.fatura (json_origem_fattureweb_id);
+
+CREATE INDEX IF NOT EXISTS ix_fatura_produto_fatura_id
+    ON public.fatura_produto (fatura_id);
+
+CREATE INDEX IF NOT EXISTS ix_fatura_tributo_fatura_id
+    ON public.fatura_tributo (fatura_id);
+
+CREATE INDEX IF NOT EXISTS ix_fatura_medidor_fatura_id
+    ON public.fatura_medidor (fatura_id);
+
+CREATE INDEX IF NOT EXISTS ix_fatura_medidor_leitura_medidor_id
+    ON public.fatura_medidor_leitura (fatura_medidor_id);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_fatura_produto_natural
+    ON public.fatura_produto (fatura_id, ordem);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_fatura_tributo_natural
+    ON public.fatura_tributo (fatura_id, ordem);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_fatura_medidor_natural
+    ON public.fatura_medidor (fatura_id, ordem);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_fatura_medidor_leitura_natural
+    ON public.fatura_medidor_leitura (fatura_medidor_id, ordem);
+
+CREATE UNIQUE INDEX IF NOT EXISTS ux_fatura_bandeira_periodo_natural
+    ON public.fatura_bandeira_periodo (fatura_id, ordem);
+
+-- =========================================================
+-- 4) MATCH SEGURO ENTRE JSON (fattureweb) E FATURA
+--    Regra conservadora:
+--    - numero_uc do JSON = consumidor.uc
+--    - mes_referencia do JSON = fatura.mes_referencia
+--    - só atualiza quando houver exatamente 1 match
+-- =========================================================
+
+CREATE TEMP TABLE tmp_fatura_match AS
+WITH json_src AS (
+    SELECT
+        fw.id AS fattureweb_id,
+        fw.id_fatture_web,
+        fw.json,
+        fw.json #>> '{data,fatura_id}' AS fatura_id_externo,
+        fw.json #>> '{data,unidade_consumidora,numero_uc}' AS numero_uc_json,
+        to_date(fw.json #>> '{data,fatura,mes_referencia}', 'MM-YYYY') AS mes_ref_json,
+        (fw.json #>> '{data,fatura,data_vencimento}')::date AS data_vencimento_json,
+        fw.json #>> '{data,fatura,numero_nota}' AS numero_nota_json
+    FROM public.fattureweb fw
+    WHERE fw.json IS NOT NULL
+      AND fw.json ? 'data'
+      AND fw.json #>> '{data,fatura_id}' IS NOT NULL
+      AND fw.json #>> '{data,unidade_consumidora,numero_uc}' IS NOT NULL
+      AND fw.json #>> '{data,fatura,mes_referencia}' IS NOT NULL
+),
+candidatos AS (
+    SELECT
+        js.*,
+        f.id AS fatura_id,
+        COUNT(*) OVER (PARTITION BY js.fattureweb_id) AS qtd_matches
+    FROM json_src js
+    JOIN public.fatura f
+      ON f.mes_referencia = js.mes_ref_json
+    JOIN public.consumidor c
+      ON c.id = f.consumidor_id
+     AND c.uc = js.numero_uc_json
+)
+SELECT *
+FROM candidatos
+WHERE qtd_matches = 1;
+
+-- =========================================================
+-- 5) BACKFILL CABEÇALHO FATURA
+-- =========================================================
+
+UPDATE public.fatura f
+SET
+    fatura_id_externo = COALESCE(f.fatura_id_externo, m.fatura_id_externo),
+    total_pagar = COALESCE(f.total_pagar, NULLIF((m.json #>> '{data,fatura,total_pagar}'), '')::numeric),
+    data_emissao = COALESCE(f.data_emissao, NULLIF((m.json #>> '{data,fatura,data_emissao}'), '')::date),
+    periodo_fiscal = COALESCE(f.periodo_fiscal, NULLIF((m.json #>> '{data,fatura,periodo_fiscal}'), '')::date),
+    data_leitura_anterior = COALESCE(f.data_leitura_anterior, NULLIF((m.json #>> '{data,fatura,leitura,data_anterior}'), '')::date),
+    data_leitura_atual = COALESCE(f.data_leitura_atual, NULLIF((m.json #>> '{data,fatura,leitura,data_atual}'), '')::date),
+    proxima_leitura = COALESCE(f.proxima_leitura, NULLIF((m.json #>> '{data,fatura,leitura,data_proxima}'), '')::date),
+    periodo_dias = COALESCE(f.periodo_dias, NULLIF((m.json #>> '{data,fatura,leitura,periodo_dias}'), '')::bigint),
+    valor_total_fatura = COALESCE(f.valor_total_fatura, NULLIF((m.json #>> '{data,fatura,total_fatura}'), '')::numeric),
+    vencimento = COALESCE(f.vencimento, NULLIF((m.json #>> '{data,fatura,data_vencimento}'), '')::date),
+    numero_fatura = COALESCE(f.numero_fatura, NULLIF((m.json #>> '{data,fatura,numero_nota}'), '')),
+    unidade_consumidora = COALESCE(f.unidade_consumidora, NULLIF((m.json #>> '{data,unidade_consumidora,numero_uc}'), '')),
+    chave_acesso = COALESCE(f.chave_acesso, NULLIF((m.json #>> '{data,outros,chave_acesso}'), '')),
+    numero_fatura_longo = COALESCE(f.numero_fatura_longo, NULLIF((m.json #>> '{data,outros,numero_fatura_longo}'), '')),
+    codigo_barras = COALESCE(f.codigo_barras, NULLIF((m.json #>> '{data,outros,codigo_barras}'), '')),
+    debito_automatico = COALESCE(f.debito_automatico, NULLIF((m.json #>> '{data,outros,debito_automatico}'), '')::boolean),
+    via_fatura = COALESCE(f.via_fatura, NULLIF((m.json #>> '{data,outros,via_fatura}'), '')),
+    saldo_mes_tp = COALESCE(f.saldo_mes_tp, NULLIF((m.json #>> '{data,outros,demonstrativo_saldos_scee,saldo_mes_tp}'), '')::numeric),
+    saldo_mes_fp = COALESCE(f.saldo_mes_fp, NULLIF((m.json #>> '{data,outros,demonstrativo_saldos_scee,saldo_mes_fp}'), '')::numeric),
+    saldo_acumulado_tp = COALESCE(f.saldo_acumulado_tp, NULLIF((m.json #>> '{data,outros,demonstrativo_saldos_scee,saldo_acumulado_tp}'), '')::numeric),
+    saldo_acumulado_fp = COALESCE(f.saldo_acumulado_fp, NULLIF((m.json #>> '{data,outros,demonstrativo_saldos_scee,saldo_acumulado_fp}'), '')::numeric),
+    saldo_expirar_tp = COALESCE(f.saldo_expirar_tp, NULLIF((m.json #>> '{data,outros,demonstrativo_saldos_scee,saldo_expirar_tp}'), '')::numeric),
+    saldo_expirar_fp = COALESCE(f.saldo_expirar_fp, NULLIF((m.json #>> '{data,outros,demonstrativo_saldos_scee,saldo_expirar_fp}'), '')::numeric),
+    fatura_origem = COALESCE(f.fatura_origem, NULLIF((m.json #>> '{data,fatura_origem}'), '')),
+    fatura_tipo = COALESCE(f.fatura_tipo, NULLIF((m.json #>> '{data,fatura_tipo}'), '')),
+    data_insercao_origem = COALESCE(f.data_insercao_origem, NULLIF((m.json #>> '{data,data_insercao}'), '')::timestamp),
+    json_origem_fattureweb_id = COALESCE(f.json_origem_fattureweb_id, m.fattureweb_id)
+FROM tmp_fatura_match m
+WHERE f.id = m.fatura_id;
+
+-- =========================================================
+-- 6) BACKFILL CONSUMIDOR
+-- =========================================================
+
+UPDATE public.consumidor c
+SET
+    nome = COALESCE(c.nome, NULLIF((m.json #>> '{data,unidade_consumidora,nome}'), '')),
+    cpf_cnpj = COALESCE(c.cpf_cnpj, NULLIF((m.json #>> '{data,unidade_consumidora,cpf_cnpj}'), '')),
+    inscricao_estadual = COALESCE(c.inscricao_estadual, NULLIF((m.json #>> '{data,unidade_consumidora,inscricao_estadual}'), '')),
+    uc = COALESCE(c.uc, NULLIF((m.json #>> '{data,unidade_consumidora,numero_uc}'), '')),
+    tipo_conexao = COALESCE(c.tipo_conexao, NULLIF((m.json #>> '{data,unidade_consumidora,instalacao,tipo_ligacao}'), '')),
+    subgrupo = COALESCE(c.subgrupo, NULLIF((m.json #>> '{data,unidade_consumidora,instalacao,subgrupo}'), '')),
+    atividade = COALESCE(c.atividade, NULLIF((m.json #>> '{data,unidade_consumidora,instalacao,atividade}'), '')),
+    atividade_especifica = COALESCE(c.atividade_especifica, NULLIF((m.json #>> '{data,unidade_consumidora,instalacao,atividade_especifica}'), '')),
+    amperagem = COALESCE(c.amperagem, NULLIF((m.json #>> '{data,unidade_consumidora,instalacao,amperagem}'), '')),
+    categoria_tensao = COALESCE(c.categoria_tensao, NULLIF((m.json #>> '{data,unidade_consumidora,instalacao,categoria_tensao}'), '')),
+    classificacao = CASE
+        WHEN c.classificacao IS NOT NULL THEN c.classificacao
+        WHEN upper(COALESCE(m.json #>> '{data,unidade_consumidora,instalacao,subgrupo}', '')) = 'B1'
+         AND upper(COALESCE(m.json #>> '{data,unidade_consumidora,instalacao,classificacao}', '')) = 'RESIDENCIAL'
+            THEN 'B1_RESIDENCIAL'
+        WHEN upper(COALESCE(m.json #>> '{data,unidade_consumidora,instalacao,subgrupo}', '')) = 'B2'
+         AND upper(COALESCE(m.json #>> '{data,unidade_consumidora,instalacao,classificacao}', '')) = 'RURAL'
+            THEN 'B2_RURAL'
+        WHEN upper(COALESCE(m.json #>> '{data,unidade_consumidora,instalacao,subgrupo}', '')) = 'B3'
+         AND upper(COALESCE(m.json #>> '{data,unidade_consumidora,instalacao,classificacao}', '')) = 'COMERCIAL'
+            THEN 'B3_COMERCIAL'
+        ELSE c.classificacao
+    END
+FROM tmp_fatura_match m
+JOIN public.fatura f ON f.id = m.fatura_id
+WHERE c.id = f.consumidor_id;
+
+-- =========================================================
+-- 7) BACKFILL ENDEREÇO
+-- =========================================================
+
+UPDATE public.endereco e
+SET
+    logradouro = COALESCE(e.logradouro, NULLIF((m.json #>> '{data,unidade_consumidora,endereco,logradouro}'), '')),
+    regiao = COALESCE(e.regiao, NULLIF((m.json #>> '{data,unidade_consumidora,endereco,regiao}'), '')),
+    endereco = COALESCE(e.endereco, NULLIF((m.json #>> '{data,unidade_consumidora,endereco,logradouro}'), '')),
+    bairro = COALESCE(e.bairro, NULLIF((m.json #>> '{data,unidade_consumidora,endereco,regiao}'), '')),
+    cep = COALESCE(e.cep, NULLIF((m.json #>> '{data,unidade_consumidora,endereco,cep}'), ''))
+FROM tmp_fatura_match m
+JOIN public.fatura f ON f.id = m.fatura_id
+JOIN public.consumidor c ON c.id = f.consumidor_id
+WHERE e.id = c.endereco_id;
+
+-- =========================================================
+-- 8) PRODUTOS
+-- =========================================================
+
+INSERT INTO public.fatura_produto (
+    fatura_id, ordem, descricao, unidade, quantidade, valor_total,
+    tarifa_com_impostos, tarifa_sem_impostos, tributo_piscofins, tributo_icms,
+    linha_original, componente, origem_energia, grupo_geracao, referencia_mes,
+    bandeira_tarifaria, patamar, ajuste, ouc, mpt, opt, rs, muc
+)
+SELECT
+    m.fatura_id,
+    p.ordem,
+    NULLIF(p.obj ->> 'descricao', ''),
+    NULLIF(p.obj ->> 'unidade', ''),
+    NULLIF(p.obj ->> 'quantidade', '')::numeric,
+    NULLIF(p.obj ->> 'valor_total', '')::numeric,
+    NULLIF(p.obj ->> 'tarifa_com_impostos', '')::numeric,
+    NULLIF(p.obj ->> 'tarifa_sem_impostos', '')::numeric,
+    NULLIF(p.obj ->> 'tributo_piscofins', '')::numeric,
+    NULLIF(p.obj ->> 'tributo_icms', '')::numeric,
+    NULLIF(p.obj #>> '{caracteristicas,linha}', ''),
+    NULLIF(p.obj #>> '{caracteristicas,componente}', ''),
+    NULLIF(p.obj #>> '{caracteristicas,origem_energia}', ''),
+    NULLIF(p.obj #>> '{caracteristicas,grupo_geracao}', ''),
+    NULLIF(p.obj #>> '{caracteristicas,referencia_mes}', ''),
+    NULLIF(p.obj #>> '{caracteristicas,bandeira_tarifaria}', ''),
+    NULLIF(p.obj #>> '{caracteristicas,patamar}', ''),
+    NULLIF(p.obj #>> '{caracteristicas,ajuste}', '')::boolean,
+    NULLIF(p.obj #>> '{caracteristicas,ouc}', '')::boolean,
+    NULLIF(p.obj #>> '{caracteristicas,mpt}', '')::boolean,
+    NULLIF(p.obj #>> '{caracteristicas,opt}', '')::boolean,
+    NULLIF(p.obj #>> '{caracteristicas,rs}', '')::boolean,
+    NULLIF(p.obj #>> '{caracteristicas,muc}', '')::boolean
+FROM tmp_fatura_match m
+CROSS JOIN LATERAL jsonb_array_elements(COALESCE(m.json #> '{data,fatura,produtos}', '[]'::jsonb))
+    WITH ORDINALITY AS p(obj, ordem)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM public.fatura_produto fp
+    WHERE fp.fatura_id = m.fatura_id
+      AND fp.ordem = p.ordem
+);
+
+-- =========================================================
+-- 9) TRIBUTOS
+-- =========================================================
+
+INSERT INTO public.fatura_tributo (
+    fatura_id, ordem, nome, base_calculo, taxa, valor
+)
+SELECT
+    m.fatura_id,
+    t.ordem,
+    NULLIF(t.obj ->> 'nome', ''),
+    NULLIF(t.obj ->> 'base_calculo', '')::numeric,
+    NULLIF(t.obj ->> 'taxa', '')::numeric,
+    NULLIF(t.obj ->> 'valor', '')::numeric
+FROM tmp_fatura_match m
+CROSS JOIN LATERAL jsonb_array_elements(COALESCE(m.json #> '{data,fatura,tributos}', '[]'::jsonb))
+    WITH ORDINALITY AS t(obj, ordem)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM public.fatura_tributo ft
+    WHERE ft.fatura_id = m.fatura_id
+      AND ft.ordem = t.ordem
+);
+
+-- =========================================================
+-- 10) HISTÓRICO DE FATURAMENTO
+--     Só insere se ainda não existir o mesmo mês para a fatura
+-- =========================================================
+
+INSERT INTO public.fatura_historico_faturamento (data, dias, energia_ativa, fatura_id)
+SELECT
+    to_date(replace(h.obj ->> 'mes', '/', '-'), 'MON-YYYY'),
+    NULLIF(h.obj ->> 'dias', '')::bigint,
+    NULLIF(h.obj ->> 'consumo', '')::bigint,
+    m.fatura_id
+FROM tmp_fatura_match m
+CROSS JOIN LATERAL jsonb_array_elements(COALESCE(m.json #> '{data,fatura,historico_faturamento}', '[]'::jsonb))
+    AS h(obj)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM public.fatura_historico_faturamento fh
+    WHERE fh.fatura_id = m.fatura_id
+      AND fh.data = to_date(replace(h.obj ->> 'mes', '/', '-'), 'MON-YYYY')
+);
+
+-- =========================================================
+-- 11) PERÍODOS DE BANDEIRA
+-- =========================================================
+
+INSERT INTO public.fatura_bandeira_periodo (fatura_id, ordem, valor_json)
+SELECT
+    m.fatura_id,
+    b.ordem,
+    b.obj
+FROM tmp_fatura_match m
+CROSS JOIN LATERAL jsonb_array_elements(COALESCE(m.json #> '{data,fatura,periodo_bandeiras}', '[]'::jsonb))
+    WITH ORDINALITY AS b(obj, ordem)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM public.fatura_bandeira_periodo fbp
+    WHERE fbp.fatura_id = m.fatura_id
+      AND fbp.ordem = b.ordem
+);
+
+-- =========================================================
+-- 12) MEDIDORES
+-- =========================================================
+
+INSERT INTO public.fatura_medidor (fatura_id, ordem, numero_medidor)
+SELECT
+    m.fatura_id,
+    med.ordem,
+    NULLIF(med.obj ->> 'numero_medidor', '')
+FROM tmp_fatura_match m
+CROSS JOIN LATERAL jsonb_array_elements(COALESCE(m.json #> '{data,fatura,leitura,medidores}', '[]'::jsonb))
+    WITH ORDINALITY AS med(obj, ordem)
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM public.fatura_medidor fm
+    WHERE fm.fatura_id = m.fatura_id
+      AND fm.ordem = med.ordem
+);
+
+-- =========================================================
+-- 13) LEITURAS DOS MEDIDORES
+-- =========================================================
+
+INSERT INTO public.fatura_medidor_leitura (
+    fatura_medidor_id, ordem, descricao_completa, posto,
+    valor_anterior, valor_atual, fator_multiplicador, valor_leitura, tipo
+)
+SELECT
+    fm.id,
+    l.ordem,
+    NULLIF(l.obj ->> 'descricao_completa', ''),
+    NULLIF(l.obj ->> 'posto', ''),
+    NULLIF(l.obj ->> 'valor_anterior', '')::numeric,
+    NULLIF(l.obj ->> 'valor_atual', '')::numeric,
+    NULLIF(l.obj ->> 'fator_multiplicador', '')::numeric,
+    NULLIF(l.obj ->> 'valor_leitura', '')::numeric,
+    NULLIF(l.obj ->> 'tipo', '')
+FROM tmp_fatura_match m
+JOIN public.fatura_medidor fm
+  ON fm.fatura_id = m.fatura_id
+CROSS JOIN LATERAL jsonb_array_elements(COALESCE(m.json #> '{data,fatura,leitura,medidores}', '[]'::jsonb))
+    WITH ORDINALITY AS med(obj, med_ordem)
+CROSS JOIN LATERAL jsonb_array_elements(COALESCE(med.obj -> 'leituras', '[]'::jsonb))
+    WITH ORDINALITY AS l(obj, ordem)
+WHERE fm.ordem = med.med_ordem
+  AND NOT EXISTS (
+      SELECT 1
+      FROM public.fatura_medidor_leitura fml
+      WHERE fml.fatura_medidor_id = fm.id
+        AND fml.ordem = l.ordem
+  );
+
+-- =========================================================
+-- 14) ANÁLISE TRIBUTÁRIA
+-- =========================================================
+
+INSERT INTO public.fatura_analise_tributaria (
+    fatura_id,
+    calc_energia_comp_te,
+    calc_te_med,
+    calc_tusd_med,
+    calc_te_mais_tusd_med,
+    calc_te_mais_tusd_med_formula,
+    calc_total_pis_cofins_comp,
+    calc_base_calc_te_piscofins,
+    calc_base_calc_tusd_piscofins,
+    calc_te_piscofins_valor,
+    calc_tusd_piscofins_valor,
+    calc_soma_te_tusd_piscofins,
+    calc_dif_piscofins,
+    calc_total_icms_comp,
+    calc_base_calc_te_icms,
+    calc_base_calc_tusd_icms,
+    calc_te_icms_valor,
+    calc_tusd_icms_valor,
+    calc_soma_te_tusd_icms,
+    calc_dif_icms,
+    status
+)
+SELECT
+    m.fatura_id,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_energia_comp_te}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_te_med}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_tusd_med}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_te_mais_tusd_med}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_te_mais_tusd_med_formula}', ''),
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_total_pis_cofins_comp}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_base_calc_te_piscofins}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_base_calc_tusd_piscofins}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_te_piscofins_valor}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_tusd_piscofins_valor}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_soma_te_tusd_piscofins}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_dif_piscofins}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_total_icms_comp}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_base_calc_te_icms}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_base_calc_tusd_icms}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_te_icms_valor}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_tusd_icms_valor}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_soma_te_tusd_icms}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,calc_dif_icms}', '')::numeric,
+    NULLIF(m.json #>> '{data,fatura,analiseTributos,status}', '')
+FROM tmp_fatura_match m
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM public.fatura_analise_tributaria fat
+    WHERE fat.fatura_id = m.fatura_id
+);
+
+-- =========================================================
+-- 15) RELATÓRIO DE VALIDAÇÃO NO FIM DA MIGRAÇÃO
+-- =========================================================
+
+DO $$
+DECLARE
+    v_json_total bigint;
+    v_match_total bigint;
+    v_sem_match bigint;
+BEGIN
+    SELECT COUNT(*) INTO v_json_total
+    FROM public.fattureweb
+    WHERE json IS NOT NULL
+      AND json ? 'data'
+      AND json #>> '{data,fatura_id}' IS NOT NULL;
+
+    SELECT COUNT(*) INTO v_match_total
+    FROM tmp_fatura_match;
+
+    v_sem_match := v_json_total - v_match_total;
+
+    RAISE NOTICE 'JSONs com fatura_id no fattureweb: %', v_json_total;
+    RAISE NOTICE 'JSONs vinculados com segurança à tabela fatura: %', v_match_total;
+    RAISE NOTICE 'JSONs sem match único e seguro: %', v_sem_match;
+    RAISE NOTICE 'Migração concluída em modo seguro/aditivo.';
+END $$;
+
+COMMIT;
