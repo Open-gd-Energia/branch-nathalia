@@ -1,0 +1,22 @@
+# 1. Usa uma imagem leve do Node.js
+FROM node:18-alpine
+
+# 2. Define o diretório de trabalho dentro do container
+WORKDIR /app
+
+# 3. Copia apenas os arquivos de dependências primeiro
+# Isso acelera o build (cache do Docker)
+COPY package*.json ./
+
+# 4. Instala as dependências
+RUN npm install
+
+# 5. Copia o restante dos arquivos do projeto
+COPY . .
+
+# 6. Expõe a porta que o Vite/React geralmente usa
+EXPOSE 5173
+
+# 7. Comando para rodar o projeto em modo de desenvolvimento
+# O --host é essencial para o Docker conseguir acessar a rede interna
+CMD ["npm", "run", "dev", "--", "--host"]

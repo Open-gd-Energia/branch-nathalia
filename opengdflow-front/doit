@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm -rf ../front-dist/*
+npm i && npm run build
+cp -r .next public package.json ../front-dist
