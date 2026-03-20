@@ -8,21 +8,21 @@ Em **Settings → General**:
 |--------------|-------|
 | **Framework Preset** | Next.js |
 | **Root Directory** | `opengdflow-front` |
-| **Build Command** | `pnpm build` (ou deixar em branco para auto) |
-| **Output Directory** | (deixar em branco — Next.js usa `.next`) |
-| **Install Command** | `corepack enable && pnpm install` |
+| **Build Command** | (deixar em branco — usa vercel.json) |
+| **Output Directory** | (deixar em branco) |
+| **Install Command** | (deixar em branco — usa vercel.json) |
 
-## 2. Variáveis de Ambiente (Settings → Environment Variables)
+## 2. Variáveis de Ambiente (Settings → Environment Variables) — OBRIGATÓRIO
 
-Configure para **Production**, **Preview** e **Development**:
+Configure para **Production**, **Preview** e **Development**. Sem isso o deploy pode falhar ou o app quebrar:
 
 | Variável | Exemplo | Obrigatório |
 |----------|---------|-------------|
-| `NEXT_PUBLIC_API_URL` | `https://seu-backend.onrender.com` ou `https://app.opengd.com.br:8080` | Sim |
-| `NEXTAUTH_URL` | `https://branch-nathalia-xxx.vercel.app` (URL do deploy) | Sim |
+| `NEXT_PUBLIC_API_URL` | `https://app.opengd.com.br:8080` (URL pública do backend) | Sim |
+| `NEXTAUTH_URL` | `https://seu-projeto.vercel.app` (URL do deploy Vercel) | Sim |
 | `NEXTAUTH_SECRET` | Gere com `openssl rand -base64 32` | Sim |
 
-**Importante:** O backend (Spring Boot) precisa estar acessível pela internet. Supabase é o banco; o backend deve estar em Render, Railway, Fly.io ou similar.
+**Importante:** O backend precisa estar acessível pela internet (não pode ser IP Tailscale ou rede privada).
 
 ## 3. Backend e CORS
 
