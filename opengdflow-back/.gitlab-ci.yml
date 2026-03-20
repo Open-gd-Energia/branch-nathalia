@@ -1,0 +1,80 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  TZ: "America/Sao_Paulo"
+  JAR_BASE_NAME: opengd
+  DATE_TAG: "$(date +'%Y%m%d-%H%M%S')"
+  SSH_USER: root
+  SSH_HOST: app.opengd.com.br
+  SSH_PORT: 22
+  REMOTE_DIR: /usr/local/openGD-API
+
+.before_script_common: &before_script_common
+  - apk add --no-cache openssh-client tzdata
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - eval $(ssh-agent -s)       # <<< inicia o ssh-agent
+  - ssh-add ~/.ssh/id_rsa      # <<< agora funciona
+  - ssh-keyscan -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
+  - chmod 600 ~/.ssh/known_hosts
+  - cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+  - echo "America/Sao_Paulo" > /etc/timezone
+
+build:
+  stage: build
+  image: maven:3.9-eclipse-temurin-21-alpine
+  cache:
+    key: maven
+    paths:
+      - .m2/repository
+  before_script:
+    - *before_script_common
+  script:
+    - export JAR_NAME="${JAR_BASE_NAME}-$(date +'%Y%m%d-%H%M%S').jar"
+    - mvn clean package -DskipTests -Duser.timezone=America/Sao_Paulo
+    - mkdir -p build-output
+    - cp target/*.jar "build-output/$JAR_NAME"
+    - cp src/main/resources/application-prod.properties build-output/application.properties
+    - cp src/main/resources/build.properties build-output/build.properties
+  artifacts:
+    paths:
+      - build-output/*.jar
+      - build-output/application.properties
+      - build-output/build.properties
+    expire_in: 1 hour
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - *before_script_common
+  script:
+    - export JAR_NAME=$(ls build-output/*.jar | xargs -n1 basename)
+    - echo "Copiando $JAR_NAME para a VPS..."
+    - scp -P $SSH_PORT build-output/$JAR_NAME $SSH_USER@$SSH_HOST:$REMOTE_DIR/$JAR_NAME
+    - scp -P $SSH_PORT build-output/application.properties $SSH_USER@$SSH_HOST:$REMOTE_DIR/application.properties
+    - scp -P $SSH_PORT build-output/build.properties $SSH_USER@$SSH_HOST:$REMOTE_DIR/build.properties
+    - echo "Iniciando processo de deploy remoto..."
+    - |
+      ssh -p $SSH_PORT $SSH_USER@$SSH_HOST <<EOF
+        echo "Parando aplicação antiga..."
+        pkill -f 'java.*opengd.*.jar' || echo "Nada rodando"
+
+        echo "Atualizando JAR..."
+        cd $REMOTE_DIR
+
+        echo "Fazendo backup log antigo..."
+        mv app.log app-$DATE_TAG.log
+
+        echo "Iniciando nova versão com nohup..."
+        nohup java -jar $JAR_NAME > app.log 2>&1 &
+        echo "Deploy finalizado com sucesso."
+      EOF
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'

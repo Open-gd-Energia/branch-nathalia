@@ -1,0 +1,1897 @@
+type: collection.insomnia.rest/5.0
+name: opengd
+meta:
+  id: wrk_35dedd088499446ea38762a9458cd661
+  created: 1740534255001
+  modified: 1740534255001
+collection:
+  - name: Security JWT
+    meta:
+      id: fld_a7d8d2ce29504f5c9cfcf12b0f75e695
+      created: 1740534255072
+      modified: 1742350797406
+      sortKey: -1729367289586.5
+    children:
+      - url: localhost:8080/login
+        name: /login Admin
+        meta:
+          id: req_6c0fce75754e45a78d8ee5f713de065f
+          created: 1740534255077
+          modified: 1742356355677
+          isPrivate: false
+          sortKey: -1728011391853
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "email": "admin",
+                "senha": "123"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/login
+        name: /login Padrao
+        meta:
+          id: req_866fada60ad14f37a5203245aafc8625
+          created: 1740544706175
+          modified: 1742356374948
+          isPrivate: false
+          sortKey: -1728011391828
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "email": "padrao",
+                "senha": "padrao"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Controller Pageable
+    meta:
+      id: fld_37fecb900bf343d29ecb9e8cf75ca22e
+      created: 1740534255134
+      modified: 1742867090870
+      sortKey: -1729819278185
+    children:
+      - url: localhost:8080/color
+        name: /color
+        meta:
+          id: req_3491328202654d688f299f797d502c34
+          created: 1740534255137
+          modified: 1740534255137
+          isPrivate: false
+          sortKey: -1729819315729
+        method: GET
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/color
+        name: /color
+        meta:
+          id: req_4ac65000510643dc8eb3a8716be25ec2
+          created: 1740534255140
+          modified: 1740534255140
+          isPrivate: false
+          sortKey: -1729819315629
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "name": "azul"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/color
+        name: /color Pageable
+        meta:
+          id: req_9091ed4d8c1e4007a9a6f77c74197fab
+          created: 1740534255143
+          modified: 1740534255143
+          isPrivate: false
+          sortKey: -1729819315679
+        method: GET
+        parameters:
+          - id: pair_30cec4f12f554535b62eca75ce040053
+            name: page
+            value: "1"
+            disabled: false
+          - id: pair_eae3db523fbb4bfc931dd0d034dcd9d3
+            name: size
+            value: "1"
+            disabled: false
+          - id: pair_821319b8589e4e219839fef01681d472
+            name: name
+            value: l
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/color/search/native
+        name: /color/search/native
+        meta:
+          id: req_f439c9c4e2a2448d808fe3d36cac428b
+          created: 1740534255146
+          modified: 1740534255146
+          isPrivate: false
+          sortKey: -1729819315654
+        method: GET
+        parameters:
+          - id: pair_30cec4f12f554535b62eca75ce040053
+            name: page
+            value: "0"
+            disabled: false
+          - id: pair_eae3db523fbb4bfc931dd0d034dcd9d3
+            name: size
+            value: "1"
+            disabled: false
+          - id: pair_821319b8589e4e219839fef01681d472
+            name: name
+            value: l
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/color/search/jpql
+        name: /color/search/jpql
+        meta:
+          id: req_0a75c91a8f6048eab1f298439a94a52c
+          created: 1740534255149
+          modified: 1740534255149
+          isPrivate: false
+          sortKey: -1729819315641.5
+        method: GET
+        parameters:
+          - id: pair_30cec4f12f554535b62eca75ce040053
+            name: page
+            value: "1"
+            disabled: false
+          - id: pair_eae3db523fbb4bfc931dd0d034dcd9d3
+            name: size
+            value: "1"
+            disabled: false
+          - id: pair_821319b8589e4e219839fef01681d472
+            name: name
+            value: l
+            disabled: false
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Usuario
+    meta:
+      id: fld_f6905f1d1f9b4291af913e1c0ab38f6a
+      created: 1742350765458
+      modified: 1742356358413
+      sortKey: -1729254292436.875
+    children:
+      - url: localhost:8080/usuarios
+        name: /usuarios
+        meta:
+          id: req_5db0c7481801495c8dbdd44cac21897c
+          created: 1740534255083
+          modified: 1742356363614
+          isPrivate: false
+          sortKey: -1742350811439
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "João Silva",
+              "celular": "+55 11 91234-5678",
+              "email": "joao.silva@email.com",
+              "senha": "senhaSuperSegura123",
+              "sexo": "1",
+              "tipo": "ADMIN",
+              "dataNascimento": "1990-12-15"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'when-expired', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/usuarios
+        name: /usuarios
+        meta:
+          id: req_95270ed58d984814a030c9fd2d1f404f
+          created: 1740534255086
+          modified: 1742350827355
+          isPrivate: false
+          sortKey: -1742350811139
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/usuarios/4
+        name: /usuarios/{id}
+        meta:
+          id: req_ed5ed4186cef4afe8898c9ba3c977f99
+          created: 1740547088358
+          modified: 1742350823023
+          isPrivate: false
+          sortKey: -1742350811239
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "João Silva 2",
+            	"celular": "+55 11 91234-5678",
+            	"email": "joao.silva@email.com",
+            	"senha": "senhaSuperSegura123",
+            	"sexo": 1,
+            	"tipo": "ADMIN",
+            	"dataNascimento": "1990-05-15",
+            	"dadosFinanceiros": [
+            		{
+            			"banco": 1,
+            			"agencia": "01",
+            			"dacAgencia": "02",
+            			"conta": "03",
+            			"dacConta": "04",
+            			"chavePix": "123456"
+            		}
+            	]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/usuarios/1/perfils
+        name: /usuarios/{id}/perfils
+        meta:
+          id: req_c28404e0d87646a59a924209718df4c5
+          created: 1741232905132
+          modified: 1742355078433
+          isPrivate: false
+          sortKey: -1742350810939
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/usuarios/2/perfils
+        name: /usuarios/{id}/perfils
+        meta:
+          id: req_fa15a1265e57481880a2ee840613efc4
+          created: 1741233023241
+          modified: 1742355268290
+          isPrivate: false
+          sortKey: -1742350810839
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"perfils": [1,2,3]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/usuarios/2
+        name: /usuarios/{id}
+        meta:
+          id: req_4449f51c1d234e7791512a4cda6bf339
+          created: 1742347233871
+          modified: 1742354925224
+          isPrivate: false
+          sortKey: -1742350811339
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/usuarios/1
+        name: /usuarios/{id}
+        meta:
+          id: req_8cc5e6e524f846d3b10fc6adbbc48094
+          created: 1742347826725
+          modified: 1742350838387
+          isPrivate: false
+          sortKey: -1742350811039
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Perfil
+    meta:
+      id: fld_ca739f7ba4ea40a08191ee329dc1d558
+      created: 1742355140967
+      modified: 1742355380411
+      sortKey: -1729226043149.4688
+    children:
+      - url: localhost:8080/perfils
+        name: /perfils
+        meta:
+          id: req_e8c9535652cf42d6a73609a26710918c
+          created: 1740534255080
+          modified: 1742355213125
+          isPrivate: false
+          sortKey: -1742355183741
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/perfils
+        name: /perfils
+        meta:
+          id: req_625f16bda0404e1296c437bf679c2677
+          created: 1740541674909
+          modified: 1742355326553
+          isPrivate: false
+          sortKey: -1742355183841
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "PADRAO3",
+            	"tipo": "PADRAO"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/perfils/3
+        name: /perfils
+        meta:
+          id: req_c526bfb019dd4d5d85bfbc97b5ff91f4
+          created: 1741222117533
+          modified: 1742355189175
+          isPrivate: false
+          sortKey: -1742355183541
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "PADRAO",
+            	"tipo": "PADRAO",
+            	"permissoes": [
+            		{
+            			"id": 2,
+            			"nome": "PADRAO",
+            			"descricao": "Usuario Padrão"
+            		}
+            	]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/perfils/1/permissoes
+        name: /perfils/{id}/permissoes
+        meta:
+          id: req_867b3642c1cd4c57990fcbf718d30f65
+          created: 1741228555496
+          modified: 1742355983972
+          isPrivate: false
+          sortKey: -1742355183441
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/perfils/2/permissoes
+        name: /perfils/{id}/permissoes
+        meta:
+          id: req_c8a8bb3a8199451e9eff28374ee20efa
+          created: 1741229744653
+          modified: 1742355970244
+          isPrivate: false
+          sortKey: -1742355183341
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"permissoes": [2]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Permissao
+    meta:
+      id: fld_72eab3c1f5c04726952a89a472b70742
+      created: 1742355364329
+      modified: 1742433924524
+      sortKey: -1729218980827.6172
+    children:
+      - url: localhost:8080/permissoes
+        name: /permissoes
+        meta:
+          id: req_2a2682b97c9b4d0fb4665b6a2d080f1b
+          created: 1740541825742
+          modified: 1742355515514
+          isPrivate: false
+          sortKey: -1742355394499
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/permissoes
+        name: /permissoes
+        meta:
+          id: req_7d876f2dd38a4733838b787cb0b34a36
+          created: 1740541837716
+          modified: 1742355889492
+          isPrivate: false
+          sortKey: -1742355394599
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "outros3",
+            	"descricao": "Usuario Padrão"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/permissoes/2
+        name: /permissoes
+        meta:
+          id: req_b2b9bc5dbca14d5e96fd8b5fa1e9e999
+          created: 1740542095411
+          modified: 1742355538202
+          isPrivate: false
+          sortKey: -1742355394299
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "outros2",
+            	"descricao": "Usuario Outros 3"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/permissoes
+        name: /permissoes User Padrão
+        meta:
+          id: req_b471b24616664313a1ef4adc6e2ce4da
+          created: 1740544749423
+          modified: 1742355450851
+          isPrivate: false
+          sortKey: -1742355394399
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_866fada60ad14f37a5203245aafc8625',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Representante
+    meta:
+      id: fld_397b5293f6364277b585baa292ba807f
+      created: 1742356947590
+      modified: 1742433854477
+      sortKey: -1729217215247.1543
+    children:
+      - url: localhost:8080/representantes
+        name: /representantes PJ
+        meta:
+          id: req_0c500757cb4a4b719484a28d26ff5809
+          created: 1742356996843
+          modified: 1742440789566
+          isPrivate: false
+          sortKey: -1742357000684
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"endereco": {
+            		"cidade": {
+            			"id": 1
+            		},
+            		"endereco": "Rua Exemplo",
+            		"numero": "123",
+            		"complemento": "Apto 45",
+            		"latitude": "-23.550520",
+            		"longitude": "-46.633308",
+            		"cep": "01000-000",
+            		"bairro": "Centro"
+            	},
+            	"pessoaJuridica": {
+            		"nomeFantasia": "nome fantasia",
+            		"razaoSocial": "razão social",
+            		"cnpj": "12.345.678/0001-97",
+            		"inscricaoEstadual": "123.456.789.000",
+            		"dataFundacao": "2000-01-01"
+            	},
+            	"tipoPessoa": "PJ",
+            	"telefone": "+55 11 91234-5678",
+            	"email": "joao.silva@example.com",
+            	"tipoRelacao": "RELACAO_TIPO_1",
+            	"dataAlteracao": "2023-10-01T12:00:00",
+            	"status": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/representantes
+        name: /representantes PF
+        meta:
+          id: req_fbeacc3176874010970948174c7aa270
+          created: 1742360990511
+          modified: 1742438514564
+          isPrivate: false
+          sortKey: -1742356197641.5
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"endereco": {
+            		"cidade": {
+            			"id": 2
+            		},
+            		"endereco": "Rua Exemplo",
+            		"numero": "123",
+            		"complemento": "Apto 45",
+            		"latitude": "-23.550520",
+            		"longitude": "-46.633308",
+            		"cep": "01000-000",
+            		"bairro": "Centro"
+            	},
+            	"pessoaFisica": {
+            		"nome": "nome pessoa fisica",
+            		"cpf": "123.456.789-01",
+            		"rg": "12.345.678-9",
+            		"profissao": "Engenheiro",
+            		"sexo": "MASCULINO",
+            		"nacionalidade": "Brasileiro",
+            		"estadoCivil": "Solteiro",
+            		"dataNascimento": "1980-01-01"
+            	},
+            	"tipoPessoa": "PF",
+            	"telefone": "+55 11 91234-5678",
+            	"email": "joao.silva@example.com",
+            	"tipoRelacao": "RELACAO_TIPO_1",
+            	"dataAlteracao": "2023-10-01T12:00:00",
+            	"status": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/representantes/2
+        name: /representantes
+        meta:
+          id: req_754366eaf18b4e1692beb9ff0d00775f
+          created: 1742435778526
+          modified: 1742435796824
+          isPrivate: false
+          sortKey: -1742356197541.5
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/representantes
+        name: /representantes
+        meta:
+          id: req_ce20e2be27a740248246abc6877c968b
+          created: 1742435862800
+          modified: 1742438604923
+          isPrivate: false
+          sortKey: -1742356197441.5
+        method: GET
+        parameters:
+          - id: pair_e63943a1389241cdb81180a8180ff2ee
+            name: nomeFantasia
+            value: fantasia
+            disabled: true
+          - id: pair_ee2e6f9f389a48278170a8fddf58f844
+            name: razaoSocial
+            value: razão
+            disabled: true
+          - id: pair_db67a898b43b49e283e70a0f2fc0ba08
+            name: nomeFisica
+            value: fisica
+            disabled: false
+          - id: pair_1a202d6051044c06890b067b8efc6056
+            name: cnpj
+            value: 12.345.678/0001-99
+            disabled: true
+          - id: pair_23ea277d41c04935a40298b7888dcdce
+            name: cpf
+            value: 123.456.789-00
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/representantes/2
+        name: /representantes/{id}
+        meta:
+          id: req_bf7c18fcdac648eca4f6bc482b664fb9
+          created: 1742438094368
+          modified: 1742438665365
+          isPrivate: false
+          sortKey: -1742355796020.25
+        method: GET
+        parameters:
+          - id: pair_52686320e4b94bc5ab87e19fd82fa476
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/representantes/3
+        name: /representantes/{id}
+        meta:
+          id: req_9ccedbab99da45f7bf280515e6266a63
+          created: 1742438172366
+          modified: 1742438590303
+          isPrivate: false
+          sortKey: -1742355595309.625
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"endereco": {
+            		"cidade": {
+            			"id": 3,
+            			"nome": "SÃO PAULO",
+            			"uf": "SP"
+            		},
+            		"endereco": "Rua Exemplo",
+            		"numero": "123",
+            		"complemento": "Apto 45",
+            		"latitude": "-23.550520",
+            		"longitude": "-46.633308",
+            		"cep": "01000-000",
+            		"bairro": "Centro"
+            	},
+            	"pessoaFisica": {
+            		"nome": "nome pessoa fisica 2",
+            		"cpf": "123.456.789-00",
+            		"rg": "12.345.678-9",
+            		"profissao": "Engenheiro",
+            		"sexo": "MASCULINO",
+            		"nacionalidade": "Brasileiro",
+            		"estadoCivil": "Solteiro",
+            		"dataNascimento": "1980-01-01"
+            	},
+            	"pessoaJuridica": null,
+            	"tipoPessoa": "PF",
+            	"telefone": "+55 11 91234-5678",
+            	"email": "joao.silva@example.com",
+            	"tipoRelacao": "RELACAO_TIPO_1",
+            	"dataAlteracao": "2023-10-01T12:00:00",
+            	"status": 1
+            }
+        parameters:
+          - id: pair_52686320e4b94bc5ab87e19fd82fa476
+            disabled: true
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Fatura
+    meta:
+      id: fld_8a2f95c289dc46d9b74e96cb5c2abb63
+      created: 1742433842485
+      modified: 1742433875885
+      sortKey: -1729215449666.6914
+  - name: Cidade
+    meta:
+      id: fld_8af76cca11d948d59cf9b039846e1e53
+      created: 1742433882200
+      modified: 1742433946054
+      sortKey: -1729216332456.9229
+    children:
+      - url: localhost:8080/cidades
+        name: /cidades
+        meta:
+          id: req_709630f1109a4eba838e8f2cda650b8f
+          created: 1742433930871
+          modified: 1742434483258
+          isPrivate: false
+          sortKey: -1742433936898
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "cascavel",
+            	"uf": "pr"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/cidades/1
+        name: /cidades
+        meta:
+          id: req_0b74ef7953a14552b3f19258324301fe
+          created: 1742434051137
+          modified: 1742434176413
+          isPrivate: false
+          sortKey: -1742433936698
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "sao paulo",
+            	"uf": "sp"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/cidades/2
+        name: /cidades
+        meta:
+          id: req_b80fcc80883547328734ff34f9e4d32f
+          created: 1742434113498
+          modified: 1742434319183
+          isPrivate: false
+          sortKey: -1742395468691
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/cidades
+        name: /cidades
+        meta:
+          id: req_2946d7e995554d309895445fd4db3d56
+          created: 1742434350264
+          modified: 1742437253371
+          isPrivate: false
+          sortKey: -1742433936748
+        method: GET
+        parameters:
+          - id: pair_435c6cd1465c4cc99e20faa7deff464a
+            name: nome
+            value: são
+            disabled: true
+          - id: pair_244eb9bcccfe4241b339ef745eeaccad
+            name: uf
+            value: sp
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Consumidor
+    meta:
+      id: fld_2db072dce543417f8064ee1bbe9dc452
+      created: 1742440006736
+      modified: 1742440006736
+      sortKey: -1729216773852.0386
+    children:
+      - url: localhost:8080/consumidores
+        name: /consumidores
+        meta:
+          id: req_d4aadfb8e0c74caea62d5bee26ca90c2
+          created: 1742440006738
+          modified: 1742440824220
+          isPrivate: false
+          sortKey: -1742357000684
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "endereco": {
+                "cidade": {
+                  "id": 1
+                },
+                "endereco": "Rua Exemplo",
+                "numero": "123",
+                "complemento": "Apto 456",
+                "latitude": "-23.550520",
+                "longitude": "-46.633308",
+                "cep": "01000-000",
+                "bairro": "Centro"
+              },
+              "nome": "Nome do Consumidor",
+              "uc": "123456789",
+              "classificacao": "ADMIN",
+              "tipo": "ADMIN",
+              "geracaoPropria": 100.50,
+              "loginDistribuidora": "login_exemplo",
+              "senhaDistribuidora": "senha_exemplo",
+              "dataAssinaturaContrato": "2023-10-01",
+              "status": 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/consumidores/2
+        name: /consumidores
+        meta:
+          id: req_8ddce882e6664e66822a8ec6b5f3e89e
+          created: 1742440006745
+          modified: 1742440241373
+          isPrivate: false
+          sortKey: -1742356197541.5
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/consumidores
+        name: /consumidores
+        meta:
+          id: req_68065a06170a4c44b1c1b264a9391a64
+          created: 1742440006751
+          modified: 1742443171238
+          isPrivate: false
+          sortKey: -1742356197441.5
+        method: GET
+        parameters:
+          - id: pair_e63943a1389241cdb81180a8180ff2ee
+            name: nome
+            value: CONSUMIDOR
+            disabled: false
+          - id: pair_db67a898b43b49e283e70a0f2fc0ba08
+            name: uc
+            value: "123456789"
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/consumidores/2
+        name: /consumidores/{id}
+        meta:
+          id: req_54fb4c4593b4422c8daf48d77f9dcf41
+          created: 1742440006755
+          modified: 1742442329581
+          isPrivate: false
+          sortKey: -1742355796020.25
+        method: GET
+        parameters:
+          - id: pair_52686320e4b94bc5ab87e19fd82fa476
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/consumidores/2
+        name: /consumidores/{id}
+        meta:
+          id: req_4d66298f78f946388d082d3f21a59d37
+          created: 1742440006758
+          modified: 1742442283899
+          isPrivate: false
+          sortKey: -1742355595309.625
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "endereco": {
+                "cidade": {
+                  "id": 1
+                },
+                "endereco": "Rua Exemplo",
+                "numero": "123",
+                "complemento": "Apto 456",
+                "latitude": "-23.550520",
+                "longitude": "-46.633308",
+                "cep": "01000-000",
+                "bairro": "Centro"
+              },
+              "nome": "Nome do Consumidor",
+              "uc": "123456789",
+              "classificacao": "ADMIN",
+              "tipo": "ADMIN",
+              "geracaoPropria": 100.50,
+              "loginDistribuidora": "login_exemplo",
+              "senhaDistribuidora": "senha_exemplo",
+              "dataAssinaturaContrato": "2023-10-01",
+              "status": 1
+            }
+        parameters:
+          - id: pair_52686320e4b94bc5ab87e19fd82fa476
+            disabled: true
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Usuario Log
+    meta:
+      id: fld_04ed62b60af841b8b342f8899357df18
+      created: 1742868463028
+      modified: 1742868516878
+      sortKey: -1729215891061.8071
+    children:
+      - url: localhost:8080/usuarioLogs
+        name: /usuarioLogs
+        meta:
+          id: req_00be7bcddd5f4939a523a636164626c2
+          created: 1742868535894
+          modified: 1742871156329
+          isPrivate: false
+          sortKey: -1742868608619
+        method: GET
+        parameters:
+          - id: pair_84888aca659c48969edd32ac3f94b3e5
+            name: page
+            value: "0"
+            disabled: true
+          - id: pair_23e360d3e374420f94b4c6801ce3797f
+            name: size
+            value: "1"
+            disabled: false
+          - id: pair_435c6cd1465c4cc99e20faa7deff464a
+            name: idUsuario
+            value: "1"
+            disabled: false
+          - id: pair_244eb9bcccfe4241b339ef745eeaccad
+            name: evento
+            value: INSERCAO
+            disabled: false
+          - id: pair_5adc1f6b35c14b4eb7dbd629fa35a78b
+            name: mensagem
+            value: mensagem
+            disabled: false
+          - id: pair_89992ecdfe94405aae6c721b82670253
+            name: origem
+            value: frontend
+            disabled: false
+          - id: pair_d9ef1f41ff774dc08ae6b152c79687e9
+            name: dataInicial
+            value: 2025-03-24 00:00:00
+            disabled: false
+          - id: pair_14cdf5bf66244d72b03fcc14b8fd8cc0
+            name: dataFim
+            value: 2025-03-24 23:59:59
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/usuarioLogs
+        name: /usuarioLogs
+        meta:
+          id: req_7cd85b067668429fa4420c71c7e67046
+          created: 1742868618872
+          modified: 1742868915285
+          isPrivate: false
+          sortKey: -1742868608719
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"usuario": {
+            		"id": 1
+            	},
+            	"evento": "INSERCAO",
+            	"mensagem": "mensagem",
+            	"origem": "frontend"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Endereco
+    meta:
+      id: fld_af5c9770da0347fdb481f450e26052fb
+      created: 1742872506975
+      modified: 1742872524855
+      sortKey: -1729215670364.2493
+    children:
+      - url: localhost:8080/enderecos
+        name: /enderecos
+        meta:
+          id: req_9aab1dbaa49048c2becb8d1bc4faf395
+          created: 1742872506977
+          modified: 1742872638040
+          isPrivate: false
+          sortKey: -1742433936898
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "cidade": {
+                "id": 1,
+                "nome": "São Paulo",
+                "estado": "SP"
+              },
+              "endereco": "Avenida Paulista",
+              "numero": "1000",
+              "complemento": "Apto 101",
+              "latitude": "-23.561684",
+              "longitude": "-46.655981",
+              "cep": "01310-100",
+              "bairro": "Bela Vista"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/enderecos/1
+        name: /enderecos/{id}
+        meta:
+          id: req_1623213c47a7402ca092a4f3b0439d45
+          created: 1742872506982
+          modified: 1742872730030
+          isPrivate: false
+          sortKey: -1742433936698
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "cidade": {
+                "id": 1,
+                "nome": "São Paulo",
+                "estado": "SP"
+              },
+              "endereco": "Avenida Paulista2",
+              "numero": "1000",
+              "complemento": "Apto 101",
+              "latitude": "-23.561684",
+              "longitude": "-46.655981",
+              "cep": "01310-100",
+              "bairro": "Bela Vista"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/enderecos/2
+        name: /enderecos/{id}
+        meta:
+          id: req_7a600531689e44989106926c8f444915
+          created: 1742872506984
+          modified: 1742872732770
+          isPrivate: false
+          sortKey: -1742395468691
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/enderecos
+        name: /enderecos
+        meta:
+          id: req_5d38da9af5204f33a91c2a3c87f299ed
+          created: 1742872506987
+          modified: 1742872645379
+          isPrivate: false
+          sortKey: -1742433936748
+        method: GET
+        parameters:
+          - id: pair_435c6cd1465c4cc99e20faa7deff464a
+            name: nome
+            value: são
+            disabled: true
+          - id: pair_244eb9bcccfe4241b339ef745eeaccad
+            name: uf
+            value: sp
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Irradiacao
+    meta:
+      id: fld_6316c5932d5f4ad799bb3bcea7f352a4
+      created: 1742873557136
+      modified: 1742873733348
+      sortKey: -1729215560015.4702
+    children:
+      - url: localhost:8080/irradiacao
+        name: /irradiacao
+        meta:
+          id: req_80cceb69c0c44b44be7fbf9cf814ba57
+          created: 1742873557138
+          modified: 1742874012956
+          isPrivate: false
+          sortKey: -1742433936898
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "usina": {
+                "id": 1
+              },
+              "data": "2025-03-25",
+              "valor": 10.10
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/irradiacao/2
+        name: /irradiacao/{id}
+        meta:
+          id: req_e33932ac8dfe4013a07deae88d738509
+          created: 1742873557141
+          modified: 1742874569692
+          isPrivate: false
+          sortKey: -1742433936698
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "usina": {
+                "id": 1
+              },
+              "data": "2025-03-25",
+              "valor": 10.20
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/irradiacao/1
+        name: /irradiacao/{id}
+        meta:
+          id: req_eb2e433d2551437cae5a9a81477087a1
+          created: 1742873557145
+          modified: 1742874547599
+          isPrivate: false
+          sortKey: -1742395468691
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/irradiacao
+        name: /irradiacao
+        meta:
+          id: req_1c12082dc86440cb9e73a17f8bc87318
+          created: 1742873557147
+          modified: 1742874740641
+          isPrivate: false
+          sortKey: -1742433936748
+        method: GET
+        parameters:
+          - id: pair_435c6cd1465c4cc99e20faa7deff464a
+            name: idUsina
+            value: "2"
+            disabled: false
+          - id: pair_244eb9bcccfe4241b339ef745eeaccad
+            name: ano
+            value: "2025"
+            disabled: false
+          - id: pair_b3f55cba77104275a44a03326c46fc36
+            name: mes
+            value: "03"
+            disabled: false
+          - id: pair_fa195323ab1f481fbfb67f017b84ea34
+            name: dia
+            value: "25"
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Previsao
+    meta:
+      id: fld_eaedf9fe7ea34a8d8ffad8f3b4c89319
+      created: 1742875864254
+      modified: 1742875864254
+      sortKey: -1729215504841.0808
+    children:
+      - url: localhost:8080/previsao
+        name: /previsao
+        meta:
+          id: req_43ab7ab7a80a4422b6977c0b9b571c67
+          created: 1742875864257
+          modified: 1742876354882
+          isPrivate: false
+          sortKey: -1742433936898
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "usina": {
+                "id": 1
+              },
+              "anoReferencia": 2023,
+              "mesReferencia": 10,
+              "geracaoPrevista": 1000.50,
+              "consumoPrevisto": 800.75,
+              "geracaoMediaPrevista": 950.25,
+              "cnsumoMedioPrevisto": 750.60
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/previsao/1
+        name: /previsao/{id}
+        meta:
+          id: req_d1d1291c92e0405dad71d11d123ec339
+          created: 1742875864261
+          modified: 1742876606556
+          isPrivate: false
+          sortKey: -1742433936698
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "usina": {
+                "id": 1
+              },
+              "anoReferencia": 2023,
+              "mesReferencia": 12,
+              "geracaoPrevista": 1000.50,
+              "consumoPrevisto": 800.75,
+              "geracaoMediaPrevista": 950.25,
+              "cnsumoMedioPrevisto": 750.60
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/previsao/1
+        name: /previsao/{id}
+        meta:
+          id: req_9d0cf4a5f3ad48b68c0a4f6779e9ef7c
+          created: 1742875864264
+          modified: 1742875922650
+          isPrivate: false
+          sortKey: -1742395468691
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: localhost:8080/previsao
+        name: /previsao
+        meta:
+          id: req_5f4010efef504f939cdf7be4910e8852
+          created: 1742875864267
+          modified: 1742876619588
+          isPrivate: false
+          sortKey: -1742433936748
+        method: GET
+        parameters:
+          - id: pair_435c6cd1465c4cc99e20faa7deff464a
+            name: idUsina
+            value: "1"
+            disabled: false
+          - id: pair_244eb9bcccfe4241b339ef745eeaccad
+            name: anoReferencia
+            value: "2023"
+            disabled: false
+          - id: pair_b3f55cba77104275a44a03326c46fc36
+            name: mesReferencia
+            value: "10"
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/10.0.0
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_6c0fce75754e45a78d8ee5f713de065f',
+            'b64::JC5hY2Nlc3NUb2tlbg==::46b', 'always', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_97243d8ab6984e11ac86fa520b230e58
+    created: 1740534255012
+    modified: 1740534255012
+environments:
+  name: Base Environment
+  meta:
+    id: env_a66a07c8c25e44f2b85dcd67faac3b4f
+    created: 1740534255005
+    modified: 1740534255005
+    isPrivate: false

@@ -1,0 +1,32 @@
+# ============================================================
+# OpenGD - Requisitos para rodar o sistema
+# ============================================================
+# Instale os itens abaixo na ordem indicada.
+# As dependências Java (Spring Boot, etc.) são resolvidas pelo Maven (pom.xml).
+# ============================================================
+
+# --- Ambiente de desenvolvimento / runtime ---
+# Java JDK 21 (obrigatório - o projeto usa java.version=21)
+# Download: https://adoptium.net/ ou https://www.oracle.com/java/technologies/downloads/
+java.version=21
+
+# Apache Maven 3.9+ (para build e dependências)
+# Download: https://maven.apache.org/download.cgi
+# Alternativa: use o wrapper do projeto com ./mvnw (Linux/Mac) ou mvnw.cmd (Windows)
+maven.version>=3.9
+
+# --- Banco de dados ---
+# PostgreSQL 12+ (recomendado 15 ou 16)
+# Usado em application.properties: localhost:5432, banco "opengd"
+# Download: https://www.postgresql.org/download/
+postgresql.version>=12
+
+# --- Opcional (conforme uso) ---
+# Servidor SMTP (envio de e-mails) - configurado em application.properties
+# Ex.: Hostinger SMTP ou outro provedor com TLS na porta 587
+# Para desenvolvimento sem e-mail, o app sobe; o envio só falha se chamado.
+
+# --- Como rodar após instalar ---
+# 1. Subir o PostgreSQL e criar o banco "opengd" (e usuário/senha conforme application.properties).
+# 2. No diretório do projeto: ./mvnw spring-boot:run   (ou: mvn spring-boot:run)
+# 3. Perfil H2 (sem PostgreSQL): ./mvnw spring-boot:run -Dspring-boot.run.profiles=h2
