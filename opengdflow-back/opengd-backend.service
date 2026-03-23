@@ -1,0 +1,17 @@
+[Unit]
+Description=OpenGD Backend (Spring Boot)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/branch-nathalia/opengdflow-back
+EnvironmentFile=/root/branch-nathalia/opengdflow-back/.env
+ExecStart=/usr/bin/java -jar /root/branch-nathalia/opengdflow-back/target/opengd-0.0.1-SNAPSHOT.jar
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
