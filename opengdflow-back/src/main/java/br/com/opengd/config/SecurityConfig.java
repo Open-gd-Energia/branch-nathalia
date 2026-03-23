@@ -26,6 +26,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -37,6 +38,7 @@ public class SecurityConfig {
     @Value("${jwt.private.key}")
     private RSAPrivateKey privateKey;
 
+    /** Origens permitidas (CORS), separadas por vírgula. Ex: http://localhost:3000,https://opengd.vercel.app */
     @Value("${opengd.url.frontend:http://localhost:3000}")
     private String frontendUrl;
 
@@ -85,8 +87,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Origens permitidas (frontend) – necessário quando allowCredentials=true
-        config.setAllowedOrigins(List.of(frontendUrl));
+        // Origens permitidas (frontend), separadas por vírgula – necessário quando allowCredentials=true
+        List<String> origins = Arrays.stream((frontendUrl != null ? frontendUrl : "").split(","))
+                .map(String::trim)
+                .filter(s -> !s.isBlank())
+                .collect(Collectors.toList());
+        config.setAllowedOrigins(origins.isEmpty() ? List.of("http://localhost:3000") : origins);
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowCredentials(true); // true = permite envio de cookies/autenticação
