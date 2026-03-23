@@ -14,13 +14,22 @@ Em **Settings → General**:
 
 ## 2. Variáveis de Ambiente (Settings → Environment Variables) — OBRIGATÓRIO
 
-Configure para **Production**, **Preview** e **Development**. Sem isso o deploy pode falhar ou o app quebrar:
+**Se aparecer "Server error" ou "error=Configuration" na tela de login, as variáveis não estão configuradas.**
 
-| Variável | Exemplo | Obrigatório |
-|----------|---------|-------------|
-| `NEXT_PUBLIC_API_URL` | `https://app.opengd.com.br:8080` (URL pública do backend) | Sim |
-| `NEXTAUTH_URL` | `https://seu-projeto.vercel.app` (URL do deploy Vercel) | Sim |
-| `NEXTAUTH_SECRET` | Gere com `openssl rand -base64 32` | Sim |
+Configure para **Production**, **Preview** e **Development**:
+
+| Variável | Valor | Obrigatório |
+|----------|-------|-------------|
+| `NEXT_PUBLIC_API_URL` | URL pública do backend (ex: `https://app.opengd.com.br:8080`) | Sim |
+| `NEXTAUTH_URL` | URL do deploy (ex: `https://branch-nathalia.vercel.app`) | Sim |
+| `NEXTAUTH_SECRET` | Chave secreta — gere com `openssl rand -base64 32` no terminal | Sim |
+
+### Como configurar no Vercel
+
+1. Vercel Dashboard → seu projeto → **Settings** → **Environment Variables**
+2. Adicione cada variável (Production, Preview e Development)
+3. Para `NEXTAUTH_SECRET`: no terminal, rode `openssl rand -base64 32` e cole o resultado
+4. **Redeploy** após salvar (Deployments → ⋯ → Redeploy)
 
 **Importante:** O backend precisa estar acessível pela internet (não pode ser IP Tailscale ou rede privada).
 

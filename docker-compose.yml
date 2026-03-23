@@ -17,7 +17,7 @@ services:
 
   # --- BACKEND (JAVA/MAVEN) ---
   backend:
-    build: ./OPENGDFLOW-BACK
+    build: ./opengdflow-back
     container_name: opengd_back
     ports:
       - "8080:8080"
@@ -32,12 +32,12 @@ services:
 
   # --- FRONTEND (NEXT.JS) ---
   frontend:
-    build: ./OPENGDFLOW-FRONT
+    build: ./opengdflow-front
     container_name: opengd_front
     ports:
       - "3000:3000"
     env_file:
-      - ./OPENGDFLOW-FRONT/.env
+      - ./opengdflow-front/.env
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8080
       - API_URL_SERVER=http://backend:8080
