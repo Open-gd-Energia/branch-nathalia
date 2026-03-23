@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 echo "Criando .env..."
 cat > .env << 'ENVEOF'
 # Variáveis de ambiente para o backend (Spring Boot)
-SPRING_DATASOURCE_URL=jdbc:postgresql://100.75.19.114:5433/opengd_bd
+SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5433/opengd_bd
 SPRING_DATASOURCE_USERNAME=admin
 SPRING_DATASOURCE_PASSWORD=involt2020
 ENVEOF

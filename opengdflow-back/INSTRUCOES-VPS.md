@@ -45,7 +45,7 @@ Copie e cole no terminal:
 ```bash
 cd ~/branch-nathalia/opengdflow-back
 cat > .env << 'EOF'
-SPRING_DATASOURCE_URL=jdbc:postgresql://100.75.19.114:5433/opengd_bd
+SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5433/opengd_bd
 SPRING_DATASOURCE_USERNAME=admin
 SPRING_DATASOURCE_PASSWORD=involt2020
 EOF
