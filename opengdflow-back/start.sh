@@ -13,4 +13,5 @@ if [ -f .env ]; then
   set +a
 fi
 
-exec java -jar target/opengd-0.0.1-SNAPSHOT.jar "$@"
+# Perfil homolog: Postgres Docker em 100.75.19.114:5433 (ver application-homolog.properties)
+exec java -jar target/opengd-0.0.1-SNAPSHOT.jar --spring.profiles.active=homolog "$@"

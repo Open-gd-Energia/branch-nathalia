@@ -34,3 +34,7 @@ build/
 
 ### Env (credenciais) ###
 .env
+
+### Chaves acidentais na VPS (não versionar) ###
+12345678
+12345678.pub

@@ -6,10 +6,10 @@ cd "$(dirname "$0")"
 
 echo "Criando .env..."
 cat > .env << 'ENVEOF'
-# Variáveis de ambiente para o backend (Spring Boot)
-SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5433/opengd_bd
+# URL do banco vem do perfil homolog (100.75.19.114:5433). Só credenciais aqui:
 SPRING_DATASOURCE_USERNAME=admin
 SPRING_DATASOURCE_PASSWORD=involt2020
+OPENGD_URL_FRONTEND=https://branch-nathalia.vercel.app
 ENVEOF
 
 echo "Criando start.sh..."
@@ -21,7 +21,7 @@ if [ -f .env ]; then
   export $(grep -v '^#' .env | grep -v '^$' | xargs)
   set +a
 fi
-exec java -jar target/opengd-0.0.1-SNAPSHOT.jar "$@"
+exec java -jar target/opengd-0.0.1-SNAPSHOT.jar --spring.profiles.active=homolog "$@"
 SCRIPTEOF
 chmod +x start.sh
 

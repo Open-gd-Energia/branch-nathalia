@@ -1,5 +1,29 @@
 # Como subir o backend na VPS
 
+## Fluxo recomendado (Linux na VPS)
+
+1. **Git:** deploy key costuma ser só leitura — use `git pull` na VPS; `git push` faça no seu PC (ou chave SSH com escrita).
+2. **Não versionar:** pasta `target/` e arquivos `.env` já estão no `.gitignore`.
+3. **Compilar com Maven na VPS:**
+   ```bash
+   cd ~/branch-nathalia/opengdflow-back
+   chmod +x mvnw
+   ./mvnw package -DskipTests
+   ```
+4. **Credenciais:** crie `.env` com `SPRING_DATASOURCE_USERNAME` e `SPRING_DATASOURCE_PASSWORD` (a URL do banco vem do perfil **homolog**: `100.75.19.114:5433`).
+5. **Subir o JAR** (perfil homolog já está no `start.sh`):
+   ```bash
+   ./start.sh
+   ```
+   Ou na mão:
+   ```bash
+   java -jar target/opengd-0.0.1-SNAPSHOT.jar --spring.profiles.active=homolog
+   ```
+
+**Chave SSH no Linux (só pull):** copie a chave pública para GitHub → *Deploy keys* ou use `ssh-keygen` e adicione a pública na conta/equipe com acesso ao repositório.
+
+---
+
 ## Opção 1: Execução manual (rápido)
 
 ```bash
@@ -45,7 +69,7 @@ Copie e cole no terminal:
 ```bash
 cd ~/branch-nathalia/opengdflow-back
 cat > .env << 'EOF'
-SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5433/opengd_bd
+SPRING_DATASOURCE_URL=jdbc:postgresql://100.75.19.114:5433/opengd_bd
 SPRING_DATASOURCE_USERNAME=admin
 SPRING_DATASOURCE_PASSWORD=involt2020
 EOF
