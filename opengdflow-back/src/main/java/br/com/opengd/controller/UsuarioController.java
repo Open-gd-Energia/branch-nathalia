@@ -52,7 +52,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN') or #id.toString() == authentication.principal.claims['sub']")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN') or #id.toString().equals(authentication.principal.subject)")
     @Operation(summary = "Buscar um objeto por id")
     public ResponseEntity<UsuarioResponse> get(@PathVariable("id") Long id) throws BusinessException {
         return ResponseEntity.ok(usuarioUseCase.get(id));
