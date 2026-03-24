@@ -14,7 +14,7 @@ export const fetchPrevisao = async (
 
 		const paramsString = queryParams.size > 0 ? `?${queryParams}` : "";
 
-		const res = await fetcher<Previsao[]>(`/previsao${paramsString}`);
+		const res = await fetcher<Previsao[]>(`/previsoes${paramsString}`);
 		return res.data;
 	} catch (error) {
 		console.error("[fetchPrevisao]:", error);

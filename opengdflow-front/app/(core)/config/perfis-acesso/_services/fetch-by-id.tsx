@@ -5,7 +5,7 @@ export const fetchAccessProfileById = async (
 	id: string | number,
 ): Promise<AccessProfile | null> => {
 	try {
-		const response = await fetcher<AccessProfile>(`/perfils/${id}`);
+		const response = await fetcher<AccessProfile>(`/perfis/${id}`);
 
 		return response.data;
 	} catch (error) {

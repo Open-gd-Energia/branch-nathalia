@@ -6,7 +6,7 @@ export const fetchPrevisaoById = async (
 ): Promise<Previsao | null> => {
 	try {
 		if (!id) return null;
-		const response = await fetcher<Previsao>(`/previsao/${id}`, {
+		const response = await fetcher<Previsao>(`/previsoes/${id}`, {
 			method: "GET",
 		});
 

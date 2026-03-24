@@ -5,7 +5,7 @@ export const fetchBandeirasTarifarias = async (): Promise<
 	BandeiraTarifaria[]
 > => {
 	try {
-		const res = await fetcher<BandeiraTarifaria[]>("/bandeiraTarifaria");
+		const res = await fetcher<BandeiraTarifaria[]>("/bandeiras-tarifarias");
 		return res.data;
 	} catch (error) {
 		console.error("[fetchBandeirasTarifarias]:", error);

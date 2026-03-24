@@ -4,7 +4,7 @@ export const deleteDiscountTypes = async (
 	id: number | string,
 ): Promise<unknown> => {
 	try {
-		const response = await fetcher(`/tipoDesconto/${id}`, {
+		const response = await fetcher(`/tipos-desconto/${id}`, {
 			method: "DELETE",
 		});
 

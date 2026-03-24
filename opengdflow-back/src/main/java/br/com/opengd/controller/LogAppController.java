@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/logApp")
+@RequestMapping("/log-app")
 @RequiredArgsConstructor
 public class LogAppController {
 

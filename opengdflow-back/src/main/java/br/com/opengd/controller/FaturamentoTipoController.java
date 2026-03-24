@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/faturamentoTipo")
+@RequestMapping("/faturamentos-tipo")
 @RequiredArgsConstructor
 public class FaturamentoTipoController {
 

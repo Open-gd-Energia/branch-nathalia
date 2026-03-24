@@ -4,7 +4,7 @@ export const deleteTariffRules = async (
 	id: number | string,
 ): Promise<unknown> => {
 	try {
-		const response = await fetcher(`/regraTarifaria/${id}`, {
+		const response = await fetcher(`/regras-tarifarias/${id}`, {
 			method: "DELETE",
 		});
 

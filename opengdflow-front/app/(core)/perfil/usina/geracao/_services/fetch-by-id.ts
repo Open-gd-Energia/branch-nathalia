@@ -6,7 +6,7 @@ export const fetchGeracaoById = async (
 ): Promise<Geracao | null> => {
 	try {
 		if (!id) return null;
-		const response = await fetcher<Geracao>(`/geracao/${id}`, {
+		const response = await fetcher<Geracao>(`/geracoes/${id}`, {
 			method: "GET",
 		});
 

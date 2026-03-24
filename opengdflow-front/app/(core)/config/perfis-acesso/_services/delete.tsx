@@ -4,7 +4,7 @@ export const deleteAccessProfile = async (
 	id: number | string,
 ): Promise<unknown> => {
 	try {
-		const response = await fetcher(`/perfils/${id}`, {
+		const response = await fetcher(`/perfis/${id}`, {
 			method: "DELETE",
 		});
 

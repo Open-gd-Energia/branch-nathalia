@@ -10,7 +10,7 @@ export const fetchTariffRules = async (
 
 		const paramsString = queryParams.size > 0 ? `?${queryParams}` : "";
 
-		const res = await fetcher<TariffRules[]>(`/regraTarifaria${paramsString}`);
+		const res = await fetcher<TariffRules[]>(`/regras-tarifarias${paramsString}`);
 		return res.data;
 	} catch (error) {
 		console.error("[fetchTariffRules]:", error);

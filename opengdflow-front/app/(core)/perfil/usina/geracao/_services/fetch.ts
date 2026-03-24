@@ -14,7 +14,7 @@ export const fetchGeracao = async (
 
 		const paramsString = queryParams.size > 0 ? `?${queryParams}` : "";
 
-		const res = await fetcher<Geracao[]>(`/geracao${paramsString}`);
+		const res = await fetcher<Geracao[]>(`/geracoes${paramsString}`);
 		return res.data;
 	} catch (error) {
 		console.error("[fetchGeracao]:", error);

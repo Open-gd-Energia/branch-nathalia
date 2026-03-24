@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/regraTarifaria")
+@RequestMapping("/regras-tarifarias")
 @RequiredArgsConstructor
 public class RegraTarifariaController {
 

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/tipoDesconto")
+@RequestMapping("/tipos-desconto")
 @RequiredArgsConstructor
 public class TipoDescontoController {
 

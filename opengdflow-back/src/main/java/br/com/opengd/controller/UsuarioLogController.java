@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/usuarioLogs")
+@RequestMapping("/usuario-logs")
 @RequiredArgsConstructor
 public class UsuarioLogController {
 

@@ -2,7 +2,7 @@ import { fetcher } from "@/lib/fetcher";
 
 export const deleteAlocacao = async (id: number | string): Promise<unknown> => {
 	try {
-		const response = await fetcher(`/alocacao/${id}`, {
+		const response = await fetcher(`/alocacoes/${id}`, {
 			method: "DELETE",
 		});
 

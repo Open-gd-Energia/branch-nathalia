@@ -11,7 +11,7 @@ export const upsertBillingType = async (
 ): Promise<UpsertBillingTypeResponse> => {
 	try {
 		const verb = data?.id ? "PUT" : "POST";
-		const route = data?.id ? `/faturamentoTipo/${data.id}` : "/faturamentoTipo";
+		const route = data?.id ? `/faturamentos-tipo/${data.id}` : "/faturamentos-tipo";
 
 		const res = await fetcher<UpsertBillingTypeResponse>(route, {
 			method: verb,

@@ -16,7 +16,7 @@ export const fetchAlocacaoItems = async (
 
 		const paramsString = queryParams.size > 0 ? `?${queryParams}` : "";
 
-		const res = await fetcher<AlocacaoItem[]>(`/alocacaoItem${paramsString}`);
+		const res = await fetcher<AlocacaoItem[]>(`/alocacao-itens${paramsString}`);
 		return res.data;
 	} catch (error) {
 		console.error("[fetchAlocacaoItems]:", error);

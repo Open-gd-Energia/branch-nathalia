@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/previsao")
+@RequestMapping("/previsoes")
 @RequiredArgsConstructor
 public class PrevisaoController {
 

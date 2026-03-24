@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/bandeiraTarifaria")
+@RequestMapping("/bandeiras-tarifarias")
 @RequiredArgsConstructor
 public class BandeiraTarifariaController {
 

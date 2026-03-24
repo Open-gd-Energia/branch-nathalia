@@ -10,7 +10,7 @@ export const upsertDiscountType = async (
 ): Promise<DiscountTypes> => {
 	try {
 		const verb = data?.id ? "PUT" : "POST";
-		const route = data?.id ? `/tipoDesconto/${data.id}` : "/tipoDesconto";
+		const route = data?.id ? `/tipos-desconto/${data.id}` : "/tipos-desconto";
 
 		const res = await fetcher<DiscountTypes>(route, {
 			method: verb,

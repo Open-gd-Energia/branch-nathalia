@@ -5,7 +5,7 @@ export const fetchTariffRulesById = async (
 	id: string | number,
 ): Promise<TariffRules | null> => {
 	try {
-		const response = await fetcher<TariffRules>(`/regraTarifaria/${id}`, {
+		const response = await fetcher<TariffRules>(`/regras-tarifarias/${id}`, {
 			method: "GET",
 		});
 

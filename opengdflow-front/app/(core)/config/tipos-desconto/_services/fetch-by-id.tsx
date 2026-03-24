@@ -5,7 +5,7 @@ export const fetchDiscountTypeById = async (
 	id: string | number,
 ): Promise<DiscountTypes | null> => {
 	try {
-		const response = await fetcher<DiscountTypes>(`/tipoDesconto/${id}`, {
+		const response = await fetcher<DiscountTypes>(`/tipos-desconto/${id}`, {
 			method: "GET",
 		});
 

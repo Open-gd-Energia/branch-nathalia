@@ -5,7 +5,7 @@ export const fetchAlocacaoById = async (
 	id: string | number,
 ): Promise<Alocacao | null> => {
 	try {
-		const response = await fetcher<Alocacao>(`/alocacao/${id}`, {
+		const response = await fetcher<Alocacao>(`/alocacoes/${id}`, {
 			method: "GET",
 		});
 

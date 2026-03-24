@@ -18,7 +18,7 @@ export const fetchBillingType = async (
 
 		const paramsString = queryParams.size > 0 ? `?${queryParams}` : "";
 
-		const res = await fetcher<BillingType[]>(`/faturamentoTipo${paramsString}`);
+		const res = await fetcher<BillingType[]>(`/faturamentos-tipo${paramsString}`);
 		return res.data;
 	} catch (error) {
 		console.error("[fetchBillingType]:", error);

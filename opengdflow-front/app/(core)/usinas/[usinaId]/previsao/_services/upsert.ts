@@ -7,7 +7,7 @@ export const upsertPrevisao = async (
 ): Promise<Previsao> => {
 	try {
 		const verb = data?.id ? "PUT" : "POST";
-		const route = data?.id ? `/previsao/${data.id}` : "/previsao";
+		const route = data?.id ? `/previsoes/${data.id}` : "/previsoes";
 
 		const res = await fetcher<Previsao>(route, {
 			method: verb,

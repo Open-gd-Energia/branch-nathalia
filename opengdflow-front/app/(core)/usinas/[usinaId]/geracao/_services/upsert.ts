@@ -7,7 +7,7 @@ export const upsertGeracao = async (
 ): Promise<Geracao> => {
 	try {
 		const verb = data?.id ? "PUT" : "POST";
-		const route = data?.id ? `/geracao/${data.id}` : "/geracao";
+		const route = data?.id ? `/geracoes/${data.id}` : "/geracoes";
 
 		const res = await fetcher<Geracao>(route, {
 			method: verb,

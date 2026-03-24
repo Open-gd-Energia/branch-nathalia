@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --no-lint",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0 -p 3010",
     "format": "biome format app components lib --write",
     "check": "biome check app components lib",
     "fix": "biome check app components lib --fix --unsafe",

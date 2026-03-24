@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/geracao")
+@RequestMapping("/geracoes")
 @RequiredArgsConstructor
 public class GeracaoController {
 

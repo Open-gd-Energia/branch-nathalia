@@ -10,7 +10,7 @@ export const upsertTariffRules = async (
 ): Promise<TariffRules> => {
 	try {
 		const verb = data?.id ? "PUT" : "POST";
-		const route = data?.id ? `/regraTarifaria/${data.id}` : "/regraTarifaria";
+		const route = data?.id ? `/regras-tarifarias/${data.id}` : "/regras-tarifarias";
 
 		const res = await fetcher<TariffRules>(route, {
 			method: verb,

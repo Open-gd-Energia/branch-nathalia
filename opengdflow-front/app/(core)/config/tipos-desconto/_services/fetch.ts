@@ -10,7 +10,7 @@ export const fetchDiscountTypes = async (
 
 		const paramsString = queryParams.size > 0 ? `?${queryParams}` : "";
 
-		const res = await fetcher<DiscountTypes[]>(`/tipoDesconto${paramsString}`);
+		const res = await fetcher<DiscountTypes[]>(`/tipos-desconto${paramsString}`);
 		return res.data;
 	} catch (error) {
 		console.error("[fetchDiscountTypes]:", error);

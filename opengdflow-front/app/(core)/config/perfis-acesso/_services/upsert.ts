@@ -12,7 +12,7 @@ export const upsertAccessProfile = async (
 ): Promise<AccessProfile> => {
 	try {
 		const verb = data?.id ? "PUT" : "POST";
-		const route = data?.id ? `/perfils/${data.id}` : "/perfils";
+		const route = data?.id ? `/perfis/${data.id}` : "/perfis";
 
 		const res = await fetcher<AccessProfile>(route, {
 			method: verb,
