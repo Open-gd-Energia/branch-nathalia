@@ -7,7 +7,7 @@ Type=simple
 User=root
 WorkingDirectory=/root/branch-nathalia/opengdflow-back
 EnvironmentFile=/root/branch-nathalia/opengdflow-back/.env
-ExecStart=/usr/bin/java -jar /root/branch-nathalia/opengdflow-back/target/opengd-0.0.1-SNAPSHOT.jar --spring.profiles.active=homolog
+ExecStart=/usr/bin/java -jar /root/branch-nathalia/opengdflow-back/target/opengd-0.0.1-SNAPSHOT.jar --spring.profiles.active=homolog --spring.jpa.hibernate.ddl-auto=none
 Restart=on-failure
 RestartSec=10
 StandardOutput=journal
