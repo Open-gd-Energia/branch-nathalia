@@ -3,6 +3,8 @@ package br.com.opengd.controller.request;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 public class DocumentoRequest {
@@ -13,6 +15,6 @@ public class DocumentoRequest {
     private String descricao;
     private String nome;
     private String tipo;
-    private Long tamanho;
+    private BigDecimal tamanho;
     private String base64;
 }

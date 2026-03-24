@@ -4,6 +4,7 @@ import br.com.opengd.enums.DocumentoHost;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,7 +13,7 @@ public class DocumentoFileResponse {
     private Long id;
     private String nome;
     private String descricao;
-    private Long tamanho;
+    private BigDecimal tamanho;
     private String tipo;
     private String url;
     private LocalDateTime dataHora;

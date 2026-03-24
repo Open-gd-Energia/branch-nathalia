@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -34,7 +35,8 @@ public class Documento {
     private Usuario usuario;
     private String nome;
     private String descricao;
-    private Long tamanho;
+    /** No banco: NUMERIC (Postgres); não usar Long/BIGINT para bater com o schema existente. */
+    private BigDecimal tamanho;
     private String tipo;
     private LocalDateTime dataHora;
     private DocumentoHost host;
