@@ -26,15 +26,15 @@ if ! command -v docker &>/dev/null; then
   sudo usermod -aG docker "$USER"
   log "Docker instalado. Reinicie a sessão SSH se tiver permissão negada."
 else
-  log "Docker $(docker --version | cut -d' ' -f3 | tr -d ',')"
+  log "Docker $(sudo docker --version | cut -d' ' -f3 | tr -d ',')"
 fi
 
-if ! docker compose version &>/dev/null; then
+if ! sudo docker compose version &>/dev/null; then
   warn "Docker Compose plugin não encontrado. Instalando..."
   sudo apt-get update -qq
   sudo apt-get install -y docker-compose-plugin
 fi
-log "Docker Compose $(docker compose version --short)"
+log "Docker Compose $(sudo docker compose version --short)"
 
 # -----------------------------------------------------------
 # 2. Verifica arquivo .env
@@ -67,7 +67,7 @@ fi
 # 4. Para containers antigos (se existirem)
 # -----------------------------------------------------------
 title "4. Parando containers antigos"
-docker compose down --remove-orphans 2>/dev/null || true
+sudo docker compose down --remove-orphans 2>/dev/null || true
 log "Containers parados"
 
 # -----------------------------------------------------------
@@ -75,7 +75,7 @@ log "Containers parados"
 # -----------------------------------------------------------
 title "5. Build e subida dos containers"
 log "Isso pode demorar alguns minutos na primeira vez (compilando Java + Node)..."
-docker compose up -d --build
+sudo docker compose up -d --build
 
 # -----------------------------------------------------------
 # 6. Aguarda backend subir
@@ -91,7 +91,7 @@ while ! curl -s http://localhost:8080/version > /dev/null 2>&1; do
   if [ "$WAITED" -ge "$MAX_WAIT" ]; then
     echo ""
     warn "Backend demorou mais de ${MAX_WAIT}s para responder. Verifique os logs:"
-    echo "  docker logs opengd_back --tail=50"
+    echo "  sudo docker logs opengd_back --tail=50"
     break
   fi
 done
@@ -113,16 +113,20 @@ if command -v psql &>/dev/null; then
     && log "Migration V012 aplicada com sucesso" \
     || warn "Migration V012 falhou ou já foi aplicada — verifique manualmente"
 else
-  warn "psql não encontrado no PATH. Instale com: sudo apt-get install postgresql-client"
-  warn "Ou rode via docker exec no container do banco:"
-  warn "  sudo docker exec -i opgdbd psql -U ${DB_USERNAME:-admin} -d opengd_bd < opengdflow-back/src/main/resources/db/migration/V012__fatura_campos_fattureweb_UP.sql"
+  warn "psql não encontrado. Aplicando via docker exec no container do banco:"
+  sudo docker exec -i opgdbd psql \
+    -U "${DB_USERNAME:-admin}" \
+    -d opengd_bd \
+    < opengdflow-back/src/main/resources/db/migration/V012__fatura_campos_fattureweb_UP.sql \
+    && log "Migration V012 aplicada com sucesso" \
+    || warn "Migration V012 falhou ou já foi aplicada — verifique manualmente"
 fi
 
 # -----------------------------------------------------------
 # 8. Status final
 # -----------------------------------------------------------
 title "8. Status dos containers"
-docker compose ps
+sudo docker compose ps
 
 echo ""
 echo -e "${GREEN}============================================${NC}"
@@ -130,5 +134,5 @@ echo -e "${GREEN}  Deploy concluído!${NC}"
 echo -e "${GREEN}  Backend:  http://100.74.229.30:8080${NC}"
 echo -e "${GREEN}  Frontend: http://100.74.229.30:3000${NC}"
 echo -e "${GREEN}  Swagger:  http://100.74.229.30:8080/swagger-ui/index.html${NC}"
-echo -e "${GREEN}  Logs:     docker compose logs -f${NC}"
+echo -e "${GREEN}  Logs:     sudo docker compose logs -f${NC}"
 echo -e "${GREEN}============================================${NC}"
