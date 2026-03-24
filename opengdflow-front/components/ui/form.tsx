@@ -73,8 +73,14 @@ const FormItemContext = React.createContext<FormItemContextValue>(
 	{} as FormItemContextValue,
 );
 
-function FormItem({ className, ...props }: React.ComponentProps<"div">) {
-	const id = React.useId();
+type FormItemProps = React.ComponentProps<"div"> & {
+	/** ID estável (ex.: "login-email") evita hydration mismatch com useId() em SSR+Turbopack */
+	formStableId?: string;
+};
+
+function FormItem({ className, formStableId, ...props }: FormItemProps) {
+	const generatedId = React.useId();
+	const id = formStableId ?? generatedId;
 
 	return (
 		<FormItemContext.Provider value={{ id }}>

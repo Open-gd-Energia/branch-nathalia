@@ -102,7 +102,7 @@ export const LoginForm = () => {
 						control={form.control}
 						name="email"
 						render={({ field }) => (
-							<FormItem>
+							<FormItem formStableId="login-email">
 								<FormLabel>E-mail</FormLabel>
 								<FormControl>
 									<Input
@@ -119,7 +119,7 @@ export const LoginForm = () => {
 						control={form.control}
 						name="senha"
 						render={({ field }) => (
-							<FormItem>
+							<FormItem formStableId="login-password">
 								<FormLabel className="mb-2">Senha</FormLabel>
 								<FormControl>
 									<PasswordInput {...field} autoComplete="current-password" />
