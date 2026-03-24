@@ -74,4 +74,11 @@ public class FaturaResponse {
     private String faturaPDF;
     private BigDecimal creditoDistribuidos;
     private String observacao;
+    // Campos adicionados via FattureWeb JSON
+    private LocalDate dataEmissao;
+    private String notaFiscal;
+    private Boolean avisoCrte;
+    private Boolean possuiDebitos;
+    private String subgrupo;
+    private String codUnidadeGeradora;
 }

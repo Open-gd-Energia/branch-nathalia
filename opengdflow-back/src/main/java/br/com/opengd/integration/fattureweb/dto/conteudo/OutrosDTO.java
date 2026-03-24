@@ -29,4 +29,19 @@ public class OutrosDTO {
     @JsonProperty("debito_automatico")
     private Boolean debitoAutomatico;
 
+    @JsonProperty("nfe")
+    private String nfe;
+
+    @JsonProperty("pix")
+    private String pix;
+
+    @JsonProperty("aviso_corte")
+    private Boolean avisoCrte;
+
+    @JsonProperty("possui_debitos")
+    private Boolean possuiDebitos;
+
+    @JsonProperty("serie_nota_fiscal")
+    private String serieNotaFiscal;
+
 }

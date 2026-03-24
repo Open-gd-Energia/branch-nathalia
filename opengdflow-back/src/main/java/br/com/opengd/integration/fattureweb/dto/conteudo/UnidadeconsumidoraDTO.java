@@ -39,4 +39,10 @@ public class UnidadeconsumidoraDTO {
     @JsonProperty("inscricao_estadual")
     private String inscricaoEstadual;
 
+    @JsonProperty("subgrupo")
+    private String subgrupo;
+
+    @JsonProperty("numero_uc")
+    private String numeroUc;
+
 }

@@ -34,4 +34,7 @@ public class LeiturasDTO {
     @JsonProperty("fator_multiplicador")
     private Long fatorMultiplicador;
 
+    @JsonProperty("criterio_medicao")
+    private String criterioMedicao;
+
 }

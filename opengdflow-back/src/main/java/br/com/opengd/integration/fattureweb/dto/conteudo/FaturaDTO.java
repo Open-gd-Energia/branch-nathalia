@@ -53,4 +53,13 @@ public class FaturaDTO {
     @JsonProperty("historico_faturamento")
     private List<HistoricoFaturamentoDTO> historicoFaturamento;
 
+    @JsonProperty("numero_fatura")
+    private String numeroFatura;
+
+    @JsonProperty("periodo_fiscal")
+    private String periodoFiscal;
+
+    @JsonProperty("bandeiras_tarifarias")
+    private List<Object> bandeirasTarifarias;
+
 }

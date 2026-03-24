@@ -189,6 +189,14 @@ public class Fatura {
 
     private String observacao;
 
+    // Campos adicionados via FattureWeb JSON
+    private LocalDate dataEmissao;
+    private String notaFiscal;
+    private Boolean avisoCrte;
+    private Boolean possuiDebitos;
+    private String subgrupo;
+    private String codUnidadeGeradora;
+
     @OneToOne(mappedBy = "fatura", cascade = CascadeType.ALL, optional = true)
     private FattureWeb fattureWeb;
 

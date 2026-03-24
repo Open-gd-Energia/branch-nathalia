@@ -57,7 +57,8 @@ public class FattureWebUseCaseImpl implements FattureWebUseCase {
         FaturaRequest faturaRequest = new FaturaRequest();
         //Todo Sem definição
         faturaRequest.setBandeiraTarifaria(null);
-        faturaRequest.setNumeroFatura((dadosDto.getFaturaId() == null) ? null : dadosDto.getFaturaId().toString());
+        // Corrigido: usa fatura.numero_fatura ao invés de fatura_id (que pode ser null)
+        faturaRequest.setNumeroFatura(dadosDto.getFatura().getNumeroFatura());
         faturaRequest.setUnidadeConsumidora((dadosDto.getUnidadeConsumidora().getInstalacao() == null) ? null : dadosDto.getUnidadeConsumidora().getInstalacao());
         faturaRequest.setCustoDisponibilidade(getCustoDisponibilidade(dadosDto.getUnidadeConsumidora().getTipoLigacao()));
         faturaRequest.setMesReferencia(toLocalDate(dadosDto.getFatura().getMesReferencia()));
@@ -122,6 +123,15 @@ public class FattureWebUseCaseImpl implements FattureWebUseCase {
         faturaRequest.setObservacao(getObservacao(dadosDto));
         faturaRequest.setMesReferencia(toLocalDate(dadosDto.getFatura().getMesReferencia()));
         faturaRequest.setVencimento(toLocalDate(dadosDto.getFatura().getDataVencimento()));
+        // Novos campos mapeados do JSON
+        faturaRequest.setDataEmissao(toLocalDate(dadosDto.getFatura().getDataEmissao()));
+        faturaRequest.setSubgrupo(dadosDto.getUnidadeConsumidora() != null ? dadosDto.getUnidadeConsumidora().getSubgrupo() : null);
+        faturaRequest.setCodUnidadeGeradora(dadosDto.getFatura().getDevolucaoGeracao() != null ? dadosDto.getFatura().getDevolucaoGeracao().getCodUnidadeGeradora() : null);
+        if (dadosDto.getOutros() != null) {
+            faturaRequest.setNotaFiscal(dadosDto.getOutros().getNotaFiscal());
+            faturaRequest.setAvisoCrte(dadosDto.getOutros().getAvisoCrte());
+            faturaRequest.setPossuiDebitos(dadosDto.getOutros().getPossuiDebitos());
+        }
         return faturaRequest;
     }
 

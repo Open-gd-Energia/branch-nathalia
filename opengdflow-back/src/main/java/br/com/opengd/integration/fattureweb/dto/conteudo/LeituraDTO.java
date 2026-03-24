@@ -25,4 +25,7 @@ public class LeituraDTO {
     @JsonProperty("data_proxima")
     private String dataProxima;
 
+    @JsonProperty("fator_potencia")
+    private BigDecimal fatorPotencia;
+
 }
