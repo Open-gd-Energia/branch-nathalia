@@ -58,7 +58,7 @@ public class Usuario {
     @JoinTable(
             name = "usuario_consumidores",
             joinColumns = @JoinColumn(name = "usuario_id"),
-            inverseJoinColumns = @JoinColumn(name = "consumidor_id")
+            inverseJoinColumns = @JoinColumn(name = "consumidores_id")
     )
     private Set<Consumidor> consumidores;
 
