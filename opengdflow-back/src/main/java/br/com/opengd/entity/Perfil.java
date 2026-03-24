@@ -31,7 +31,7 @@ public class Perfil {
     @JoinTable(
             name = "perfil_permissoes",
             joinColumns = @JoinColumn(name = "perfil_id"),
-            inverseJoinColumns = @JoinColumn(name = "permissao_id")
+            inverseJoinColumns = @JoinColumn(name = "permissoes_id")
     )
     private Set<Permissao> permissoes = new HashSet<>();
 
