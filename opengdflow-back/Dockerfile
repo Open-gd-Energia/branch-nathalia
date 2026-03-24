@@ -10,4 +10,5 @@ WORKDIR /app
 # O nome do arquivo gerado pelo seu pom será opengd-0.0.1-SNAPSHOT.jar
 COPY --from=build /app/target/opengd-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Sobe com perfil homolog (aponta para o Postgres externo via Tailscale)
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=homolog", "--spring.jpa.hibernate.ddl-auto=none"]

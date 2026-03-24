@@ -15,4 +15,6 @@ COPY . .
 
 EXPOSE 3000
 
+# pnpm run dev → hot-reload, adequado para homolog na VPS
+# Para produção (mais rápido), trocar por: pnpm build && pnpm start
 CMD ["pnpm", "run", "dev"]
